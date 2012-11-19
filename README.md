@@ -1,6 +1,11 @@
-# DeviseMasquerade
+# Devise Masquerade
 
-TODO: Write a gem description
+It's a utility library for enabling functionallity like login as button for
+admin.
+
+If you have multi users application and sometimes you want to test functionally
+using login of existing user without requesting the password, define login as
+button with url helper and use it.
 
 ## Installation
 
@@ -12,13 +17,11 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install devise_masquerade
-
 ## Usage
 
-TODO: Write usage instructions here
+In the view you can use url helper for defining link:
+
+    = link_to "Login As", masquerade_path(user)
 
 ## Contributing
 
