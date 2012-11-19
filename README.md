@@ -25,15 +25,12 @@ In the view you can use url helper for defining link:
 
 Add into your application_controller.rb:
 
-    ```ruby
     before_filter :masquerade_user!
-    ```
 
 Instead of user you can use your resource name admin, student or another names.
 
 ## Custom controller for adding cancan for authorization
 
-    ```ruby
     class Admin::MasqueradesController < Devise::MasqueradesController
       def show
         authorize!(:masquerade, User)
@@ -41,7 +38,6 @@ Instead of user you can use your resource name admin, student or another names.
         super
       end
     end
-    ```
 
 ## Contributing
 
