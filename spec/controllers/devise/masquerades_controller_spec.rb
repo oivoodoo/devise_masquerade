@@ -13,7 +13,7 @@ describe Devise::MasqueradesController do
         before do
           SecureRandom.should_receive(:base64).and_return("secure_key")
 
-          get :masquerade, :id => user.to_param
+          get :show, :id => user.to_param
         end
 
         it { should redirect_to("/?masquerade=secure_key") }
@@ -21,7 +21,7 @@ describe Devise::MasqueradesController do
     end
 
     context 'when not logged in' do
-      before { get :masquerade, :id => 'any_id' }
+      before { get :show, :id => 'any_id' }
 
       it { should redirect_to(new_user_session_path) }
     end
