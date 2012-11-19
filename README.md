@@ -1,5 +1,7 @@
 # Devise Masquerade
 
+[![Build Status](https://secure.travis-ci.org/oivoodoo/devise_masquerade.png?branch=master)](https://travis-ci.org/oivoodoo/devise_masquerade)
+
 It's a utility library for enabling functionallity like login as button for
 admin.
 
