@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = DeviseMasquerade::VERSION
   gem.authors       = ["Alexandr Korsak"]
   gem.email         = ["alex.korsak@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{devise masquerade library}
+  gem.summary       = %q{use for login as functionallity on your admin users pages}
   gem.homepage      = "http://github.com/oivoodoo/devise_masquerade/"
 
   gem.files         = `git ls-files`.split($/)
