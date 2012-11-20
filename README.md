@@ -59,9 +59,9 @@ Instead of user you can use your resource name admin, student or another names.
 
 ## You can redefine few options:
 
-  Devise.masquerade_param = 'masquerade'
-  Devise.masquerade_expires_in = 10.seconds
-  Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.base64
+    Devise.masquerade_param = 'masquerade'
+    Devise.masquerade_expires_in = 10.seconds
+    Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.base64
 
 ## Contributing
 
