@@ -2,6 +2,8 @@
 
 [![Build Status](https://secure.travis-ci.org/oivoodoo/devise_masquerade.png?branch=master)](https://travis-ci.org/oivoodoo/devise_masquerade)
 
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/oivoodoo/devise_masquerade)
+
 It's a utility library for enabling functionallity like login as button for
 admin.
 
