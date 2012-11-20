@@ -41,6 +41,28 @@ Instead of user you can use your resource name admin, student or another names.
       end
     end
 
+## Custom url redirect after masquerade:
+
+    class Admin::MasqueradesController < Devise::MasqueradesController
+      def show
+        authorize!(:masquerade, User)
+
+        super
+      end
+
+      protected
+
+      def after_masquerade_path_for(resource)
+        "/custom_url"
+      end
+    end
+
+## You can redefine few options:
+
+  Devise.masquerade_param = 'masquerade'
+  Devise.masquerade_expires_in = 10.seconds
+  Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.base64
+
 ## Contributing
 
 1. Fork it
