@@ -7,9 +7,9 @@ module Devise
         attr_reader :masquerade_key
 
         def masquerade!
-          @masquerade_key = SecureRandom.base64(16)
+          @masquerade_key = SecureRandom.base64(Devise.masquerade_key_size)
 
-          Rails.cache.write("#{self.class.name.pluralize.downcase}:#{@masquerade_key}:masquerade", id, :expires_in => 10.seconds)
+          Rails.cache.write("#{self.class.name.pluralize.downcase}:#{@masquerade_key}:masquerade", id, :expires_in => Devise.masquerade_expires_in)
         end
 
         def self.find_by_masquerade_key(key)

@@ -8,7 +8,7 @@ class Devise::MasqueradesController < DeviseController
 
     self.resource.masquerade!
 
-    redirect_to(after_masquerade_path_for(self.resource))
+    redirect_to("#{after_masquerade_path_for(self.resource)}?#{after_masquerade_param_for(resource)}")
   end
 
   private
@@ -18,7 +18,11 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def after_masquerade_path_for(resource)
-    "/?masquerade=#{resource.masquerade_key}"
+    "/"
+  end
+
+  def after_masquerade_param_for(resource)
+    "#{Devise.masquerade_param}=#{resource.masquerade_key}"
   end
 end
 

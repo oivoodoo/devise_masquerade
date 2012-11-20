@@ -12,6 +12,15 @@ module DeviseMasquerade
 end
 
 module Devise
+  mattr_accessor :masquerade_param
+  @@masquerade_param = 'masquerade'
+
+  mattr_accessor :masquerade_expires_in
+  @@masquerade_expires_in = 10.seconds
+
+  mattr_accessor :masquerade_key_size
+  @@masquerade_key_size = 16
+
   @@helpers << DeviseMasquerade::Controllers::Helpers
 end
 
