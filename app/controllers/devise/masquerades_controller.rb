@@ -1,5 +1,7 @@
 class Devise::MasqueradesController < DeviseController
-  prepend_before_filter :authenticate_scope!, :only => :masquerade
+  prepend_before_filter :authenticate_scope!
+
+  before_filter :save_masquerade_owner_session, :only => :show
 
   def show
     self.resource = resource_class.to_adapter.find_first(:id => params[:id])
@@ -9,6 +11,16 @@ class Devise::MasqueradesController < DeviseController
     self.resource.masquerade!
 
     redirect_to("#{after_masquerade_path_for(self.resource)}?#{after_masquerade_param_for(resource)}")
+  end
+
+  def back
+    owner_user = resource_class.to_adapter.find_first(:id => session[session_key])
+
+    session[session_key] = nil
+
+    sign_in owner_user
+
+    redirect_to '/'
   end
 
   private
@@ -23,6 +35,14 @@ class Devise::MasqueradesController < DeviseController
 
   def after_masquerade_param_for(resource)
     "#{Devise.masquerade_param}=#{resource.masquerade_key}"
+  end
+
+  def save_masquerade_owner_session
+    session[session_key] = send("current_#{resource_name}").id
+  end
+
+  def session_key
+    "devise.masquerade.#{resource_name}"
   end
 end
 

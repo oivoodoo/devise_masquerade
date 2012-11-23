@@ -7,6 +7,7 @@ module ActionDispatch::Routing
       resources :masquerade, :only => :show,
         :path => mapping.path_names[:masquerade],
         :controller => controllers[:masquerades] do
+        get :back, :on => :collection
       end
     end
   end

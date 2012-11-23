@@ -6,7 +6,6 @@ describe User do
   describe '#masquerade!' do
     it 'should cache special key on masquerade' do
       SecureRandom.should_receive(:base64).with(16).and_return("secure_key")
-      Rails.cache.should_receive(:write).with("users:secure_key:masquerade", user.id, :expires_in => 10.seconds)
 
       user.masquerade!
     end
