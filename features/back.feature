@@ -3,7 +3,6 @@ Feature: Use back button for returning to the owner of the masquerade action.
   As an masquerade user
   I want to be able to press a simple button on the page
 
-  @devise
   Scenario: Use back button
     Given I logged in
     And I have a user for masquerade
