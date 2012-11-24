@@ -15,6 +15,9 @@ module Devise
         def self.find_by_masquerade_key(key)
           id = Rails.cache.read("#{self.name.pluralize.downcase}:#{key}:masquerade")
 
+          # clean up the cached masquerade key value
+          Rails.cache.write("#{self.name.pluralize.downcase}:#{key}:masquerade", nil)
+
           self.find_by_id(id)
         end
       end

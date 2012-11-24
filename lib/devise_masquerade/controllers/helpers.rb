@@ -14,7 +14,7 @@ module DeviseMasquerade
           end
 
           def #{name}_masquerade?
-            session["devise.masquerade.#{name}"].present?
+            session[:"devise_masquerade_#{name}"].present?
           end
         METHODS
 

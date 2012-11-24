@@ -42,7 +42,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def session_key
-    "devise.masquerade.#{resource_name}"
+    "devise_masquerade_#{resource_name}".to_sym
   end
 end
 

@@ -16,6 +16,7 @@ describe User do
       user.masquerade!
 
       Rails.cache.should_receive(:read).with("users:#{user.masquerade_key}:masquerade").and_return(user.id)
+      Rails.cache.should_receive(:write).with("users:#{user.masquerade_key}:masquerade", nil)
 
       new_user = User.find_by_masquerade_key(user.masquerade_key)
 
