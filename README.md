@@ -33,6 +33,13 @@ Add into your application_controller.rb:
 
 Instead of user you can use your resource name admin, student or another names.
 
+If you want to back to the owner of masquerade action user you could use
+helpers:
+
+    user_masquerade? # current user was masqueraded by owner?
+
+    = link_to "Reverse masquerade", back_masquerade_path(current_user)
+
 ## Custom controller for adding cancan for authorization
 
     class Admin::MasqueradesController < Devise::MasqueradesController
