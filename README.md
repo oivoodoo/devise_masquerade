@@ -72,6 +72,15 @@ helpers:
     Devise.masquerade_expires_in = 10.seconds
     Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.base64
 
+## Demo project
+
+    cd spec/dummy
+    rake db:setup
+    rails server
+
+And check http://localhost:3000/, use for login user1@example.com and
+'password'
+
 ## Contributing
 
 1. Fork it
