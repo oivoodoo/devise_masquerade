@@ -12,11 +12,16 @@ group :test do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-bundler'
-  gem 'capybara', '>= 0.4.0'
+  gem 'guard-cucumber'
   gem 'rspec-rails'
   gem 'shoulda'
   gem 'rb-fsevent'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+  gem 'cucumber'
+  gem 'cucumber-rails'
+  gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'launchy'
 end
 

@@ -2,7 +2,7 @@ class DashboardController < ApplicationController
   before_filter :masquerade_user!
 
   def index
-    render :text => "text to render"
+    @users = User.where("users.id != ?", current_user.id).all
   end
 end
 

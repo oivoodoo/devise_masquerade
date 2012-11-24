@@ -12,7 +12,15 @@ module DeviseMasquerade
 
             sign_in #{name} if #{name}
           end
+
+          def #{name}_masquerade?
+            session["devise.masquerade.#{name}"].present?
+          end
         METHODS
+
+        ActiveSupport.on_load(:action_controller) do
+          helper_method "#{name}_masquerade?"
+        end
       end
     end
   end
