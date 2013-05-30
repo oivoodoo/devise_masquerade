@@ -4,6 +4,8 @@
 
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/oivoodoo/devise_masquerade)
 
+[![endorse](https://api.coderwall.com/oivoodoo/endorsecount.png)](https://coderwall.com/oivoodoo)
+
 It's a utility library for enabling functionallity like login as button for
 admin.
 
