@@ -29,6 +29,10 @@ In the view you can use url helper for defining link:
 
     = link_to "Login As", masquerade_path(user)
 
+In the model you'll need to add the parameter :masqueradable to the existing comma separated values in the devise method:
+
+    devise :invitable, :confirmable, :database_authenticatable, :registerable, :masqueradable
+         
 Add into your application_controller.rb:
 
     before_filter :masquerade_user!
