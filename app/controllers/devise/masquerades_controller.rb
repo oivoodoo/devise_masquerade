@@ -2,6 +2,7 @@ class Devise::MasqueradesController < DeviseController
   prepend_before_filter :authenticate_scope!
 
   before_filter :save_masquerade_owner_session, :only => :show
+  after_filter :cleanup_masquerade_owner_session, :only => :back
 
   def show
     self.resource = resource_class.to_adapter.find_first(:id => params[:id])
@@ -15,8 +16,6 @@ class Devise::MasqueradesController < DeviseController
 
   def back
     owner_user = resource_class.to_adapter.find_first(:id => session[session_key])
-
-    session[session_key] = nil
 
     sign_in owner_user
 
@@ -39,6 +38,10 @@ class Devise::MasqueradesController < DeviseController
 
   def save_masquerade_owner_session
     session[session_key] = send("current_#{resource_name}").id
+  end
+
+  def cleanup_masquerade_owner_session
+    session.delete(session_key)
   end
 
   def session_key

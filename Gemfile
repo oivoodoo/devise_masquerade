@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 # Specify your gem's dependencies in devise_masquerade.gemspec
 gemspec
@@ -17,7 +17,7 @@ group :test do
   gem 'shoulda'
   gem 'rb-fsevent'
   gem 'factory_girl_rails'
-  gem 'database_cleaner'
+  gem 'database_cleaner', '< 1.1.0'
   gem 'cucumber'
   gem 'cucumber-rails'
   gem 'capybara'

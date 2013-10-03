@@ -16,6 +16,7 @@ describe Devise::MasqueradesController do
           get :show, :id => mask.to_param
         end
 
+        it { session.keys.should include('devise_masquerade_user') }
         it { should redirect_to("/?masquerade=secure_key") }
       end
     end
@@ -32,13 +33,17 @@ describe Devise::MasqueradesController do
       context 'and masquerade user' do
         let(:mask) { create(:user) }
 
-        before { get :show, :id => mask.to_param }
+        before do
+          SecureRandom.should_receive(:base64).and_return("secure_key")
+          get :show, :id => mask.to_param
+        end
 
         context 'and back' do
           before { get :back }
 
           it { should redirect_to(masquerade_page) }
           it { current_user.reload.should == @user }
+          it { session.keys.should_not include('devise_masquerade_user') }
         end
       end
     end
