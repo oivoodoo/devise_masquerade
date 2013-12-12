@@ -11,7 +11,7 @@ describe Devise::MasqueradesController do
         let(:mask) { create(:user) }
 
         before do
-          SecureRandom.should_receive(:base64).and_return("secure_key")
+          SecureRandom.should_receive(:urlsafe_base64).and_return("secure_key")
 
           get :show, :id => mask.to_param
         end
@@ -34,7 +34,7 @@ describe Devise::MasqueradesController do
         let(:mask) { create(:user) }
 
         before do
-          SecureRandom.should_receive(:base64).and_return("secure_key")
+          SecureRandom.should_receive(:urlsafe_base64).and_return("secure_key")
           get :show, :id => mask.to_param
         end
 

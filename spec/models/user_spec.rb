@@ -5,13 +5,13 @@ describe User do
 
   describe '#masquerade!' do
     it 'should cache special key on masquerade' do
-      SecureRandom.should_receive(:base64).with(16).and_return("secure_key")
+      SecureRandom.should_receive(:urlsafe_base64).with(16).and_return("secure_key")
       user.masquerade!
     end
   end
 
   describe '#remove_masquerade_key' do
-    before { SecureRandom.stub(:base64).and_return("secure_key") }
+    before { SecureRandom.stub(:urlsafe_base64).and_return("secure_key") }
 
     let(:key) { 'users:secure_key:masquerade' }
 
