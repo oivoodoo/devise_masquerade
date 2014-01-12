@@ -34,7 +34,7 @@ In the view you can use url helper for defining link:
 In the model you'll need to add the parameter :masqueradable to the existing comma separated values in the devise method:
 
     devise :invitable, :confirmable, :database_authenticatable, :registerable, :masqueradable
-         
+
 Add into your application_controller.rb:
 
     before_filter :masquerade_user!
@@ -78,7 +78,7 @@ helpers:
 
     Devise.masquerade_param = 'masquerade'
     Devise.masquerade_expires_in = 10.seconds
-    Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.base64
+    Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.urlsafe_base64
 
 ## Demo project
 
