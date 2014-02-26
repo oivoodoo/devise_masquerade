@@ -19,7 +19,7 @@ class Devise::MasqueradesController < DeviseController
 
     sign_in owner_user
 
-    redirect_to '/'
+    redirect_to after_back_masquerade_path_for(owner_user)
   end
 
   private
@@ -34,6 +34,10 @@ class Devise::MasqueradesController < DeviseController
 
   def after_masquerade_param_for(resource)
     "#{Devise.masquerade_param}=#{resource.masquerade_key}"
+  end
+
+  def after_back_masquerade_path_for(resource)
+    "/"
   end
 
   def save_masquerade_owner_session
