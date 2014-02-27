@@ -79,6 +79,7 @@ helpers:
     Devise.masquerade_param = 'masquerade'
     Devise.masquerade_expires_in = 10.seconds
     Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.urlsafe_base64
+    Devise.masquerade_bypass_warden_callback = false
 
 ## Demo project
 

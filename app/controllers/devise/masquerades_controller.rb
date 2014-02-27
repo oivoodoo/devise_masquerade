@@ -17,7 +17,7 @@ class Devise::MasqueradesController < DeviseController
   def back
     owner_user = resource_class.to_adapter.find_first(:id => session[session_key])
 
-    sign_in owner_user
+    sign_in(owner_user, :bypass => Devise.masquerade_bypass_warden_callback)
 
     redirect_to after_back_masquerade_path_for(owner_user)
   end
