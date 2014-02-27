@@ -10,7 +10,7 @@ module DeviseMasquerade
 
             #{name} = #{name.to_s.classify}.find_by_masquerade_key(params[:masquerade])
 
-            sign_in(#{name}, :bypass => true) if #{name}
+            sign_in(#{name}, :bypass => Devise.masquerade_bypass_warden_callback) if #{name}
           end
 
           def #{name}_masquerade?

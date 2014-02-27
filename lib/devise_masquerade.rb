@@ -21,6 +21,9 @@ module Devise
   mattr_accessor :masquerade_key_size
   @@masquerade_key_size = 16
 
+  mattr_accessor :masquerade_bypass_warden_callback
+  @@masquerade_bypass_warden_callback = false
+
   @@helpers << DeviseMasquerade::Controllers::Helpers
 end
 
