@@ -3,12 +3,13 @@ module DeviseMasquerade
     module Helpers
       def self.define_helpers(mapping)
         name = mapping.name
+        class_name = mapping.class_name
 
         class_eval <<-METHODS, __FILE__, __LINE__ + 1
           def masquerade_#{name}!
             return if params[:masquerade].blank?
 
-            #{name} = ::#{name.to_s.classify}.find_by_masquerade_key(params[:masquerade])
+            #{name} = ::#{class_name}.find_by_masquerade_key(params[:masquerade])
 
             sign_in(#{name}, :bypass => Devise.masquerade_bypass_warden_callback) if #{name}
           end
