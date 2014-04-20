@@ -11,6 +11,8 @@ class Devise::MasqueradesController < DeviseController
 
     self.resource.masquerade!
 
+    sign_in(self.resource, :bypass => Devise.masquerade_bypass_warden_callback)
+
     redirect_to("#{after_masquerade_path_for(self.resource)}?#{after_masquerade_param_for(resource)}")
   end
 

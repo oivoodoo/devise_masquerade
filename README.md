@@ -90,6 +90,14 @@ helpers:
 And check http://localhost:3000/, use for login user1@example.com and
 'password'
 
+## Test project
+
+    cd spec/dummy
+    rake db:setup db:test:prepare
+    cd -
+    rspec
+
+
 ## Contributing
 
 1. Fork it
