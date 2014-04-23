@@ -12,31 +12,12 @@ describe Devise::MasqueradesController do
 
         before do
           SecureRandom.should_receive(:urlsafe_base64).and_return("secure_key")
-
           get :show, :id => mask.to_param
         end
 
         it { session.keys.should include('devise_masquerade_user') }
+        it { session["warden.user.user.key"].first.first.should == mask.id }
         it { should redirect_to("/?masquerade=secure_key") }
-      end
-    end
-
-    context 'when not logged in' do
-      before { get :show, :id => 'any_id' }
-
-      it { should redirect_to(new_user_session_path) }
-    end
-
-    describe 'back to the owner of the request' do
-      before { logged_in }
-
-      context 'and masquerade user' do
-        let(:mask) { create(:user) }
-
-        before do
-          SecureRandom.should_receive(:urlsafe_base64).and_return("secure_key")
-          get :show, :id => mask.to_param
-        end
 
         context 'and back' do
           before { get :back }
@@ -46,6 +27,12 @@ describe Devise::MasqueradesController do
           it { session.keys.should_not include('devise_masquerade_user') }
         end
       end
+    end
+
+    context 'when not logged in' do
+      before { get :show, :id => 'any_id' }
+
+      it { should redirect_to(new_user_session_path) }
     end
   end
 
