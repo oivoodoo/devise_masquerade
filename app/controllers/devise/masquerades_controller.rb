@@ -17,7 +17,13 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def back
-    owner_user = resource_class.to_adapter.find_first(:id => session[session_key])
+    user_id = session[session_key]
+
+    owner_user = if user_id.present?
+                   resource_class.to_adapter.find_first(:id => user_id)
+                 else
+                   send(:"current_#{resouce_name}")
+                 end
 
     sign_in(owner_user, :bypass => Devise.masquerade_bypass_warden_callback)
 
