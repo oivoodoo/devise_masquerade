@@ -10,6 +10,7 @@ class Devise::MasqueradesController < DeviseController
     redirect_to(new_user_session_path) and return unless self.resource
 
     self.resource.masquerade!
+    request.env["devise.skip_trackable"] = "1"
 
     sign_in(self.resource, :bypass => Devise.masquerade_bypass_warden_callback)
 
@@ -26,6 +27,7 @@ class Devise::MasqueradesController < DeviseController
                  end
 
     sign_in(owner_user, :bypass => Devise.masquerade_bypass_warden_callback)
+    request.env["devise.skip_trackable"] = nil
 
     redirect_to after_back_masquerade_path_for(owner_user)
   end
