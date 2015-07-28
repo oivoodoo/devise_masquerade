@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DashboardController do
+describe DashboardController, type: :controller do
   context 'when logged in' do
     before { logged_in }
 
@@ -13,8 +13,7 @@ describe DashboardController do
         get :index, :masquerade => user.masquerade_key
       end
 
-      it { current_user.reload.should == user }
+      it { expect(current_user.reload).to eq(user) }
     end
   end
 end
-

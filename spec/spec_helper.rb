@@ -23,6 +23,8 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Authentication
 
+  config.raise_errors_for_deprecations!
+
   config.mock_with :rspec
 
   config.before(:suite) do
@@ -38,4 +40,3 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
-

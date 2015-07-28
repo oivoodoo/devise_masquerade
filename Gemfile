@@ -9,6 +9,8 @@ group :test do
   gem "bson_ext", "~> 1.3"
   gem 'sqlite3'
 
+  gem 'test-unit'
+
   gem 'pry'
   gem 'pry-byebug'
 
@@ -18,6 +20,9 @@ group :test do
   gem 'guard-cucumber'
 
   gem 'rspec-rails'
+  gem 'rspec'
+  gem 'rspec-mocks'
+
   gem 'shoulda'
   gem 'rb-fsevent'
   gem 'factory_girl_rails'
@@ -28,4 +33,3 @@ group :test do
   gem 'capybara-webkit'
   gem 'launchy'
 end
-
