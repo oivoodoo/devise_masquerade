@@ -4,4 +4,9 @@ rvm:
 gemfile:
   - Gemfile
 script: time ./script/travis.sh
-
+cache: bundler
+sudo: false
+addons:
+  apt:
+    packages:
+    - time
