@@ -5,22 +5,22 @@ describe User do
 
   describe '#masquerade!' do
     it 'should cache special key on masquerade' do
-      SecureRandom.should_receive(:urlsafe_base64).with(16).and_return("secure_key")
+      expect(SecureRandom).to receive(:urlsafe_base64).with(16) { "secure_key" }
       user.masquerade!
     end
   end
 
   describe '#remove_masquerade_key' do
-    before { SecureRandom.stub(:urlsafe_base64).and_return("secure_key") }
+    before { allow(SecureRandom).to receive(:urlsafe_base64) { "secure_key" } }
 
     let(:key) { 'users:secure_key:masquerade' }
 
     it 'should be possible to remove cached masquerade key' do
       user.masquerade!
-      expect(Rails.cache.exist?(key)).to be_true
+      expect(Rails.cache.exist?(key)).to eq(true)
 
       User.remove_masquerade_key!('secure_key')
-      expect(Rails.cache.exist?(key)).to be_false
+      expect(Rails.cache.exist?(key)).to eq(false)
     end
   end
 
@@ -28,13 +28,12 @@ describe User do
     it 'should be possible to find user by generate masquerade key' do
       user.masquerade!
 
-      Rails.cache.should_receive(:read).with("users:#{user.masquerade_key}:masquerade").and_return(user.id)
-      Rails.cache.should_receive(:delete).with("users:#{user.masquerade_key}:masquerade")
+      allow(Rails.cache).to receive(:read).with("users:#{user.masquerade_key}:masquerade") { user.id }
+      allow(Rails.cache).to receive(:delete).with("users:#{user.masquerade_key}:masquerade")
 
       new_user = User.find_by_masquerade_key(user.masquerade_key)
 
-      new_user.should == user
+      expect(new_user).to eq(user)
     end
   end
 end
-

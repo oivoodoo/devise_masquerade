@@ -8,12 +8,21 @@ group :test do
   gem 'actionmailer', '~> 3.0'
   gem "bson_ext", "~> 1.3"
   gem 'sqlite3'
-  gem 'debugger'
+
+  gem 'test-unit'
+
+  gem 'pry'
+  gem 'pry-byebug'
+
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-bundler'
   gem 'guard-cucumber'
+
   gem 'rspec-rails'
+  gem 'rspec'
+  gem 'rspec-mocks'
+
   gem 'shoulda'
   gem 'rb-fsevent'
   gem 'factory_girl_rails'
@@ -24,4 +33,3 @@ group :test do
   gem 'capybara-webkit'
   gem 'launchy'
 end
-

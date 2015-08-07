@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::DashboardController do
+describe Admin::DashboardController, type: :controller do
   context 'when logged in' do
     before { admin_logged_in }
 
@@ -12,8 +12,7 @@ describe Admin::DashboardController do
         get :index, :masquerade => user.masquerade_key
       end
 
-      it { current_admin_user.reload.should == user }
+      it { expect(current_admin_user.reload).to eq(user) }
     end
   end
 end
-

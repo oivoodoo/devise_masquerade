@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Devise::MasqueradesController do
+describe Devise::MasqueradesController, type: :controller do
   context 'with configured devise app' do
     before { @request.env['devise.mapping'] = Devise.mappings[:user] }
 
@@ -11,20 +11,20 @@ describe Devise::MasqueradesController do
         let(:mask) { create(:user) }
 
         before do
-          SecureRandom.should_receive(:urlsafe_base64).and_return("secure_key")
+          expect(SecureRandom).to receive(:urlsafe_base64) { "secure_key" }
           get :show, :id => mask.to_param
         end
 
-        it { session.keys.should include('devise_masquerade_user') }
-        it { session["warden.user.user.key"].first.first.should == mask.id }
+        it { expect(session.keys).to include('devise_masquerade_user') }
+        it { expect(session["warden.user.user.key"].first.first).to eq(mask.id) }
         it { should redirect_to("/?masquerade=secure_key") }
 
         context 'and back' do
           before { get :back }
 
           it { should redirect_to(masquerade_page) }
-          it { current_user.reload.should == @user }
-          it { session.keys.should_not include('devise_masquerade_user') }
+          it { expect(current_user.reload).to eq(@user) }
+          it { expect(session.keys).not_to include('devise_masquerade_user') }
         end
       end
     end
@@ -41,4 +41,3 @@ describe Devise::MasqueradesController do
     "/"
   end
 end
-

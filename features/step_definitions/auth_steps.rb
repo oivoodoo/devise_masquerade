@@ -6,6 +6,5 @@ Given /^I logged in$/ do
   fill_in 'user[email]', :with => @user.email
   fill_in 'user[password]', :with => 'password'
 
-  click_on 'Sign in'
+  click_on 'Log in'
 end
-
