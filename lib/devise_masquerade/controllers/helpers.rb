@@ -17,10 +17,16 @@ module DeviseMasquerade
           def #{name}_masquerade?
             session[:"devise_masquerade_#{name}"].present?
           end
+
+          def #{name}_masquerade_owner
+            return nil unless send(:#{name}_masquerade?)
+            ::#{class_name}.to_adapter.find_first(:id => session[:"devise_masquerade_#{name}"])
+          end
         METHODS
 
         ActiveSupport.on_load(:action_controller) do
           helper_method "#{name}_masquerade?"
+          helper_method "#{name}_masquerade_owner"
         end
       end
     end
