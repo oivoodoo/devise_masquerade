@@ -6,4 +6,4 @@ function red() {
     echo -e "\e[00;31m$1\e[00m"
 }
 
-(bundle exec rspec && bundle exec cucumber) || { red "Failed specs"; exit 1; }
+(cd spec/dummy/ && RAILS_ENV=test rake db:setup && cd ../../ && bundle exec rspec && bundle exec cucumber) || { red "Failed specs"; exit 1; }
