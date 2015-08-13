@@ -52,22 +52,25 @@ helpers:
 ## Custom controller for adding cancan for authorization
 
     class Admin::MasqueradesController < Devise::MasqueradesController
+      before_filter :save_masquerade_owner_session, :only => :show, if: -> { authorized? }
+      after_filter :cleanup_masquerade_owner_session, :only => :back, if: -> { authorized? }
+
       def show
-        authorize!(:masquerade, User)
+        authorized?
 
         super
+      end
+
+      private
+
+      def authorized?
+        authorize!(:masquerade, User)
       end
     end
 
 ## Custom url redirect after masquerade:
 
     class Admin::MasqueradesController < Devise::MasqueradesController
-      def show
-        authorize!(:masquerade, User)
-
-        super
-      end
-
       protected
 
       def after_masquerade_path_for(resource)

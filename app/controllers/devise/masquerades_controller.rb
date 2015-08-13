@@ -35,6 +35,9 @@ class Devise::MasqueradesController < DeviseController
   private
 
   def authenticate_scope!
+    require 'pry'
+    binding.pry
+
     send(:"authenticate_#{resource_name}!", :force => true)
   end
 
@@ -62,4 +65,3 @@ class Devise::MasqueradesController < DeviseController
     "devise_masquerade_#{resource_name}".to_sym
   end
 end
-
