@@ -12,7 +12,15 @@ class Devise::MasqueradesController < DeviseController
     self.resource.masquerade!
     request.env["devise.skip_trackable"] = "1"
 
-    sign_in(self.resource, :bypass => Devise.masquerade_bypass_warden_callback)
+    if Devise.masquerade_bypass_warden_callback
+      if respond_to?(:bypass_sign_in)
+        bypass_sign_in(self.resource)
+      else
+        sign_in(self.resource, :bypass => true)
+      end
+    else
+      sign_in(self.resource)
+    end
 
     redirect_to("#{after_masquerade_path_for(self.resource)}?#{after_masquerade_param_for(resource)}")
   end
@@ -26,7 +34,15 @@ class Devise::MasqueradesController < DeviseController
                    send(:"current_#{resource_name}")
                  end
 
-    sign_in(owner_user, :bypass => Devise.masquerade_bypass_warden_callback)
+    if Devise.masquerade_bypass_warden_callback
+      if respond_to?(:bypass_sign_in)
+        bypass_sign_in(owner_user)
+      else
+        sign_in(owner_user, :bypass => true)
+      end
+    else
+      sign_in(owner_user)
+    end
     request.env["devise.skip_trackable"] = nil
 
     redirect_to after_back_masquerade_path_for(owner_user)

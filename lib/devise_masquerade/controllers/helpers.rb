@@ -11,7 +11,17 @@ module DeviseMasquerade
 
             #{name} = ::#{class_name}.find_by_masquerade_key(params[:masquerade])
 
-            sign_in(#{name}, :bypass => Devise.masquerade_bypass_warden_callback) if #{name}
+            if #{name}
+              if Devise.masquerade_bypass_warden_callback
+                if respond_to?(:bypass_sign_in)
+                  bypass_sign_in(#{name})
+                else
+                  sign_in(#{name}, :bypass => true)
+                end
+              else
+                sign_in(#{name})
+              end
+            end
           end
 
           def #{name}_masquerade?
