@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.2.2
+  - 2.2.5
 gemfile:
   - Gemfile
 script: time ./script/travis.sh

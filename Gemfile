@@ -24,9 +24,8 @@ group :test do
   gem 'rspec-mocks'
 
   gem 'shoulda'
-  gem 'rb-fsevent'
   gem 'factory_girl_rails'
-  gem 'database_cleaner', '< 1.1.0'
+  gem 'database_cleaner'
   gem 'cucumber'
   gem 'cucumber-rails'
   gem 'capybara'
