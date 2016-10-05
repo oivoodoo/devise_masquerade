@@ -35,8 +35,10 @@ module DeviseMasquerade
         METHODS
 
         ActiveSupport.on_load(:action_controller) do
-          helper_method "#{name}_masquerade?"
-          helper_method "#{name}_masquerade_owner"
+          if respond_to?(:helper_method)
+            helper_method "#{name}_masquerade?"
+            helper_method "#{name}_masquerade_owner"
+          end
         end
       end
     end
