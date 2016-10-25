@@ -74,6 +74,12 @@ helpers:
         "/custom_url"
       end
     end
+    
+#### Dont forget to update your Devise routes to point at your Custom Authorization Controller
+in `routes.rb`:
+
+    devise_for :users, controllers: { masquerades: "admin/masquerades" }
+
 
 ## You can redefine few options:
 
