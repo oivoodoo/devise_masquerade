@@ -38,7 +38,7 @@ In the model you'll need to add the parameter :masqueradable to the existing com
 
 Add into your application_controller.rb:
 
-    before_filter :masquerade_user!
+    before_action :masquerade_user!
 
 Instead of user you can use your resource name admin, student or another names.
 
