@@ -38,7 +38,7 @@ In the model you'll need to add the parameter :masqueradable to the existing com
 
 Add into your application_controller.rb:
 
-    before_filter :masquerade_user!
+    before_action :masquerade_user!
 
 Instead of user you can use your resource name admin, student or another names.
 
@@ -100,7 +100,7 @@ And check http://localhost:3000/, use for login user1@example.com and
 ## Test project
 
     cd spec/dummy
-    rake db:setup db:test:prepare
+    RAILS_ENV=test rake db:setup
     cd -
     rspec
 

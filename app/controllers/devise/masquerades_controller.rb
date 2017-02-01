@@ -1,8 +1,21 @@
 class Devise::MasqueradesController < DeviseController
-  prepend_before_filter :authenticate_scope!
+  if respond_to?(:prepend_before_action)
+    prepend_before_action :authenticate_scope!
+  else
+    prepend_before_filter :authenticate_scope!
+  end
 
-  before_filter :save_masquerade_owner_session, :only => :show
-  after_filter :cleanup_masquerade_owner_session, :only => :back
+  if respond_to?(:before_action)
+    before_action :save_masquerade_owner_session, :only => :show
+  else
+    before_filter :save_masquerade_owner_session, :only => :show
+  end
+
+  if respond_to?(:after_action)
+    after_action :cleanup_masquerade_owner_session, :only => :back
+  else
+    after_filter :cleanup_masquerade_owner_session, :only => :back
+  end
 
   def show
     self.resource = resource_class.to_adapter.find_first(:id => params[:id])
