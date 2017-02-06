@@ -24,6 +24,9 @@ module Devise
   mattr_accessor :masquerade_bypass_warden_callback
   @@masquerade_bypass_warden_callback = false
 
+  mattr_accessor :masquerade_routes_back
+  @@masquerade_routes_back = false
+
   @@helpers << DeviseMasquerade::Controllers::Helpers
 end
 

@@ -35,7 +35,11 @@ class Devise::MasqueradesController < DeviseController
       sign_in(self.resource)
     end
 
-    redirect_to("#{after_masquerade_path_for(self.resource)}?#{after_masquerade_param_for(resource)}")
+    if Devise.masquerade_routes_back
+      redirect_back(fallback_location: "#{after_masquerade_param_for(self.resource)}?#{after_masquerade_param_for(resource)}")
+    else
+      redirect_to("#{after_masquerade_path_for(self.resource)}?#{after_masquerade_param_for(resource)}")
+    end
   end
 
   def back
@@ -58,7 +62,11 @@ class Devise::MasqueradesController < DeviseController
     end
     request.env["devise.skip_trackable"] = nil
 
-    redirect_to after_back_masquerade_path_for(owner_user)
+    if Devise.masquerade_routes_back
+      redirect_back(fallback_location: after_back_masquerade_path_for(owner_user))
+    else
+      redirect_to after_back_masquerade_path_for(owner_user)
+    end
   end
 
   private
