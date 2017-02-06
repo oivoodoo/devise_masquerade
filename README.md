@@ -103,6 +103,7 @@ And check http://localhost:3000/, use for login user1@example.com and
     RAILS_ENV=test rake db:setup
     cd -
     rspec
+    cucumber
 
 
 ## Contributing
