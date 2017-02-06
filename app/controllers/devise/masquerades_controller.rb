@@ -80,7 +80,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def save_masquerade_owner_session
-    session[session_key] = send("current_#{resource_name}").id
+    session[session_key] = send("current_#{resource_name}").id unless session.key? session_key
   end
 
   def cleanup_masquerade_owner_session
