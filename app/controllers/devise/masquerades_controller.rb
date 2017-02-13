@@ -35,8 +35,10 @@ class Devise::MasqueradesController < DeviseController
       sign_in(self.resource)
     end
 
-    if Devise.masquerade_routes_back
+    if Devise.masquerade_routes_back && Rails::VERSION::MAJOR == 5
       redirect_back(fallback_location: "#{after_masquerade_param_for(self.resource)}?#{after_masquerade_param_for(resource)}")
+    elsif Devise.masquerade_routes_back && request.env['HTTP_REFERER'].present?
+      redirect_to :back
     else
       redirect_to("#{after_masquerade_path_for(self.resource)}?#{after_masquerade_param_for(resource)}")
     end
@@ -62,8 +64,11 @@ class Devise::MasqueradesController < DeviseController
     end
     request.env["devise.skip_trackable"] = nil
 
-    if Devise.masquerade_routes_back
+    if Devise.masquerade_routes_back && Rails::VERSION::MAJOR == 5
+      # If using the masquerade_routes_back and Rails 5
       redirect_back(fallback_location: after_back_masquerade_path_for(owner_user))
+    elsif Devise.masquerade_routes_back && request.env['HTTP_REFERER'].present?
+      redirect_to :back
     else
       redirect_to after_back_masquerade_path_for(owner_user)
     end
