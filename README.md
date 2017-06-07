@@ -53,28 +53,31 @@ helpers:
 
     class Admin::MasqueradesController < Devise::MasqueradesController
       def show
-        authorize!(:masquerade, User)
-
         super
       end
+
+      protected
+
+      def masquerade_authorize!
+        authorize!(:masquerade, User)
+      end
+
+      # or you can define:
+      # def masquerade_authorized?
+      #   <has access to something?> (true/false)
+      # end
     end
 
 ## Custom url redirect after masquerade:
 
     class Admin::MasqueradesController < Devise::MasqueradesController
-      def show
-        authorize!(:masquerade, User)
-
-        super
-      end
-
       protected
 
       def after_masquerade_path_for(resource)
         "/custom_url"
       end
     end
-    
+
 #### Dont forget to update your Devise routes to point at your Custom Authorization Controller
 in `routes.rb`:
 

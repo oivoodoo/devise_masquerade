@@ -1,8 +1,6 @@
 class Users::MasqueradesController < Devise::MasqueradesController
   # Just an example showing how you would add authorization to devise_masquerade
-   def show
-    # do authorization stuff here 
-
+  def show
     super
   end
 

@@ -1,6 +1,7 @@
 require 'cucumber/rails'
 require 'factory_girl'
 require 'database_cleaner'
+require 'cucumber/rspec/doubles'
 
 Dir[File.join(File.dirname(__FILE__), '..', '..', "spec/support/*.rb")].each {|f| require f}
 
@@ -20,4 +21,8 @@ end
 
 Cucumber::Rails::Database.javascript_strategy = :truncation
 Capybara.javascript_driver = :webkit
+
+Before do
+  allow_any_instance_of(DeviseController).to receive(:devise_mapping) { Devise.mappings[:user] }
+end
 
