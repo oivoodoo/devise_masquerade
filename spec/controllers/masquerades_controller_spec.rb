@@ -5,16 +5,15 @@ describe MasqueradesController, type: :controller do
 
   context 'no access for masquerade' do
     before do
-      allow_any_instance_of(MasqueradesController).to receive(:authorized?) { false }
+      session.clear
+      allow_any_instance_of(MasqueradesController).to receive(:masquerade_authorized?) { false }
     end
 
     before { logged_in }
 
     let(:mask) { create(:user) }
 
-    before do
-      get :show, :id => mask.to_param
-    end
+    before { get :show, :id => mask.to_param }
 
     it { expect(response.status).to eq(403) }
     it { expect(session.keys).not_to include('devise_masquerade_user') }
@@ -23,7 +22,8 @@ describe MasqueradesController, type: :controller do
 
   context 'access for masquerade' do
     before do
-      allow_any_instance_of(MasqueradesController).to receive(:authorized?) { true }
+      session.clear
+      allow_any_instance_of(MasqueradesController).to receive(:masquerade_authorized?) { true }
     end
 
     before { logged_in }

@@ -1,8 +1,8 @@
 class Devise::MasqueradesController < DeviseController
   if respond_to?(:prepend_before_action)
-    prepend_before_action :authenticate_scope!
+    prepend_before_action :authenticate_scope!, :masquerade_authorize!
   else
-    prepend_before_filter :authenticate_scope!
+    prepend_before_filter :authenticate_scope!, :masquerade_authorize!
   end
 
   if respond_to?(:before_action)
@@ -74,12 +74,19 @@ class Devise::MasqueradesController < DeviseController
     end
   end
 
+  protected
+
+  def masquerade_authorize!
+    head(403) unless masquerade_authorized?
+  end
+
+  def masquerade_authorized?
+    true
+  end
+
   private
 
   def authenticate_scope!
-    require 'pry'
-    binding.pry
-
     send(:"authenticate_#{resource_name}!", :force => true)
   end
 
