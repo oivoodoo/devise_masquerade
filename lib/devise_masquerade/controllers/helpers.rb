@@ -9,7 +9,7 @@ module DeviseMasquerade
           def masquerade_#{name}!
             return if params["#{Devise.masquerade_param}"].blank?
 
-            #{name} = ::#{class_name}.find_by_masquerade_key(params[#{Devise.masquerade_param}])
+            #{name} = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"])
 
             if #{name}
               if Devise.masquerade_bypass_warden_callback
