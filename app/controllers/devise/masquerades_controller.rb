@@ -18,9 +18,12 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def show
-    self.resource = resource_class.to_adapter.find_first(:id => params[:id])
+    self.resource = masqueraded_resource_class.to_adapter.find_first(:id => params[:id])
 
-    redirect_to(new_user_session_path) and return unless self.resource
+    unless self.resource
+      flash[:error] = "#{masqueraded_resource_class} not found."
+      redirect_to(new_user_session_path) and return
+    end
 
     self.resource.masquerade!
     request.env["devise.skip_trackable"] = "1"
@@ -48,10 +51,14 @@ class Devise::MasqueradesController < DeviseController
     user_id = session[session_key]
 
     owner_user = if user_id.present?
-                   resource_class.to_adapter.find_first(:id => user_id)
+                   masquerading_resource_class.to_adapter.find_first(:id => user_id)
                  else
-                   send(:"current_#{resource_name}")
+                   send(:"current_#{masquerading_resource_name}")
                  end
+
+    if masquerading_resource_class != masqueraded_resource_class
+      sign_out(send("current_#{masqueraded_resource_name}"))
+    end
 
     if Devise.masquerade_bypass_warden_callback
       if respond_to?(:bypass_sign_in)
@@ -86,8 +93,24 @@ class Devise::MasqueradesController < DeviseController
 
   private
 
+  def masqueraded_resource_class
+    Devise.masqueraded_resource_class || resource_class
+  end
+
+  def masqueraded_resource_name
+    Devise.masqueraded_resource_name || resource_name
+  end
+
+  def masquerading_resource_class
+    Devise.masquerading_resource_class || resource_class
+  end
+
+  def masquerading_resource_name
+    Devise.masquerading_resource_name || resource_name
+  end
+
   def authenticate_scope!
-    send(:"authenticate_#{resource_name}!", :force => true)
+    send(:"authenticate_#{masquerading_resource_name}!", :force => true)
   end
 
   def after_masquerade_path_for(resource)
@@ -103,7 +126,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def save_masquerade_owner_session
-    session[session_key] = send("current_#{resource_name}").id unless session.key? session_key
+    session[session_key] = send("current_#{masquerading_resource_name}").id unless session.key? session_key
   end
 
   def cleanup_masquerade_owner_session
@@ -111,6 +134,6 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def session_key
-    "devise_masquerade_#{resource_name}".to_sym
+    "devise_masquerade_#{masqueraded_resource_name}".to_sym
   end
 end
