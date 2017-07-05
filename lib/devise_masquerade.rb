@@ -27,6 +27,16 @@ module Devise
   mattr_accessor :masquerade_routes_back
   @@masquerade_routes_back = false
 
+  mattr_accessor :masqueraded_resource_class
+
+  mattr_accessor :masqueraded_resource_name
+  @@masqueraded_resource_name = :user
+
+  mattr_accessor :masquerading_resource_class
+
+  mattr_accessor :masquerading_resource_name
+  @@masquerading_resource_name = :user
+
   @@helpers << DeviseMasquerade::Controllers::Helpers
 end
 
