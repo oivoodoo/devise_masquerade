@@ -34,11 +34,15 @@ In the view you can use url helper for defining link:
 
 In the model you'll need to add the parameter :masqueradable to the existing comma separated values in the devise method:
 
+```ruby
     devise :invitable, :confirmable, :database_authenticatable, :registerable, :masqueradable
+```
 
 Add into your application_controller.rb:
 
+```ruby
     before_action :masquerade_user!
+```
 
 Instead of user you can use your resource name admin, student or another names.
 
@@ -51,6 +55,7 @@ helpers:
 
 ## Custom controller for adding cancan for authorization
 
+```ruby
     class Admin::MasqueradesController < Devise::MasqueradesController
       def show
         super
@@ -67,9 +72,11 @@ helpers:
       #   <has access to something?> (true/false)
       # end
     end
+```
 
 ## Custom url redirect after masquerade:
 
+```ruby
     class Admin::MasqueradesController < Devise::MasqueradesController
       protected
 
@@ -77,20 +84,24 @@ helpers:
         "/custom_url"
       end
     end
+```
 
 #### Dont forget to update your Devise routes to point at your Custom Authorization Controller
 in `routes.rb`:
 
+```ruby
     devise_for :users, controllers: { masquerades: "admin/masquerades" }
-
+```
 
 ## You can redefine few options:
 
+```ruby
     Devise.masquerade_param = 'masquerade'
     Devise.masquerade_expires_in = 10.seconds
     Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.urlsafe_base64
     Devise.masquerade_bypass_warden_callback = false
     Devise.masquerade_routes_back = false # if true, route back to the page the user was on via redirect_back
+```
 
 ## Demo project
 
@@ -103,12 +114,7 @@ And check http://localhost:3000/, use for login user1@example.com and
 
 ## Test project
 
-    cd spec/dummy
-    RAILS_ENV=test rake db:setup
-    cd -
-    rspec
-    cucumber
-
+    make test
 
 ## Contributing
 
