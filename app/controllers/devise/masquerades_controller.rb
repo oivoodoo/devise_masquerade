@@ -18,7 +18,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def show
-    self.resource = masqueraded_resource_class.to_adapter.find_first(:id => params[:id])
+    self.resource = find_resource
 
     unless self.resource
       flash[:error] = "#{masqueraded_resource_class} not found."
@@ -89,6 +89,10 @@ class Devise::MasqueradesController < DeviseController
 
   def masquerade_authorized?
     true
+  end
+  
+  def find_resource
+    masqueraded_resource_class.to_adapter.find_first(:id => params[:id])
   end
 
   private

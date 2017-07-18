@@ -74,6 +74,28 @@ helpers:
     end
 ```
 
+## Alternatively using Pundit
+
+Controller:
+
+```ruby
+    class Admin::MasqueradesController < Devise::MasqueradesController
+      protected
+      
+      def masquerade_authorize!
+        authorize(User, :masquerade?) unless params[:action] == 'back'
+      end
+    end
+```
+
+In your view:
+
+```erb
+    <% if policy(@user).masquerade? %>
+      <%= link_to "Login as", masquerade_path(@user) %>
+    <% end %>
+```
+
 ## Custom url redirect after masquerade:
 
 ```ruby
@@ -82,6 +104,20 @@ helpers:
 
       def after_masquerade_path_for(resource)
         "/custom_url"
+      end
+    end
+```
+
+## Overriding the finder
+
+For example, if you use FriendlyId:
+
+```ruby
+    class Admin::MasqueradesController < Devise::MasqueradesController
+      protected
+      
+      def find_resource
+        masqueraded_resource_class.friendly.find(params[:id])
       end
     end
 ```
