@@ -13,7 +13,8 @@ module Devise
       module InstanceMethods
         def masquerade!
           @masquerade_key = SecureRandom.urlsafe_base64(Devise.masquerade_key_size)
-          Rails.cache.write("#{self.class.name.pluralize.underscore}:#{@masquerade_key}:masquerade", id, :expires_in => Devise.masquerade_expires_in)
+          cache_key = self.class.cache_masquerade_key_by(@masquerade_key)
+          Rails.cache.write(cache_key, id, :expires_in => Devise.masquerade_expires_in)
         end
       end
 
