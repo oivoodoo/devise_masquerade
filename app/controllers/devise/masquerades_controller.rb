@@ -28,15 +28,7 @@ class Devise::MasqueradesController < DeviseController
     self.resource.masquerade!
     request.env["devise.skip_trackable"] = "1"
 
-    if Devise.masquerade_bypass_warden_callback
-      if respond_to?(:bypass_sign_in)
-        bypass_sign_in(self.resource)
-      else
-        sign_in(self.resource, :bypass => true)
-      end
-    else
-      sign_in(self.resource)
-    end
+    masquerade_sign_in(self.resource)
 
     if Devise.masquerade_routes_back && Rails::VERSION::MAJOR == 5
       redirect_back(fallback_location: "#{after_masquerade_param_for(self.resource)}?#{after_masquerade_param_for(resource)}")
@@ -60,15 +52,7 @@ class Devise::MasqueradesController < DeviseController
       sign_out(send("current_#{masqueraded_resource_name}"))
     end
 
-    if Devise.masquerade_bypass_warden_callback
-      if respond_to?(:bypass_sign_in)
-        bypass_sign_in(owner_user)
-      else
-        sign_in(owner_user, :bypass => true)
-      end
-    else
-      sign_in(owner_user)
-    end
+    masquerade_sign_in(owner_user)
     request.env["devise.skip_trackable"] = nil
 
     if Devise.masquerade_routes_back && Rails::VERSION::MAJOR == 5

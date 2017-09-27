@@ -12,15 +12,7 @@ module DeviseMasquerade
             #{name} = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"])
 
             if #{name}
-              if Devise.masquerade_bypass_warden_callback
-                if respond_to?(:bypass_sign_in)
-                  bypass_sign_in(#{name})
-                else
-                  sign_in(#{name}, :bypass => true)
-                end
-              else
-                sign_in(#{name})
-              end
+              masquerade_sign_in(#{name})
             end
           end
 
@@ -31,6 +23,20 @@ module DeviseMasquerade
           def #{name}_masquerade_owner
             return nil unless send(:#{name}_masquerade?)
             ::#{class_name}.to_adapter.find_first(:id => session[:"devise_masquerade_#{name}"])
+          end
+
+          private
+
+          def masquerade_sign_in(resource)
+            if Devise.masquerade_bypass_warden_callback
+              if respond_to?(:bypass_sign_in)
+                bypass_sign_in(resource)
+              else
+                sign_in(resource, :bypass => true)
+              end
+            else
+              sign_in(resource)
+            end
           end
         METHODS
 
