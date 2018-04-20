@@ -44,9 +44,13 @@ describe Devise::MasqueradesController, type: :controller do
             end # context
 
             context '< Rails 5, fallback if http_referer not present' do
+              before do
+                allow_any_instance_of(described_class).to receive(:after_masquerade_path_for).and_return("/dashboard?color=red")
+              end
+
               before { get :show, id: mask.to_param }
 
-              it { should redirect_to("/?masquerade=secure_key") }
+              it { should redirect_to("/dashboard?color=red&masquerade=secure_key") }
             end # context
           end # context
 
