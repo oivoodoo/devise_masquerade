@@ -1,5 +1,6 @@
 # Devise Masquerade
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/oivoodoo/devise_masquerade?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade?ref=badge_shield)
 
 [![Build Status](https://secure.travis-ci.org/oivoodoo/devise_masquerade.png?branch=master)](https://travis-ci.org/oivoodoo/devise_masquerade)
 
@@ -159,3 +160,7 @@ And check http://localhost:3000/, use for login user1@example.com and
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade?ref=badge_large)
