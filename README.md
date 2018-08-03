@@ -82,7 +82,7 @@ Controller:
 ```ruby
     class Admin::MasqueradesController < Devise::MasqueradesController
       protected
-      
+
       def masquerade_authorize!
         authorize(User, :masquerade?) unless params[:action] == 'back'
       end
@@ -116,7 +116,7 @@ For example, if you use FriendlyId:
 ```ruby
     class Admin::MasqueradesController < Devise::MasqueradesController
       protected
-      
+
       def find_resource
         masqueraded_resource_class.friendly.find(params[:id])
       end
@@ -138,6 +138,8 @@ in `routes.rb`:
     Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.urlsafe_base64
     Devise.masquerade_bypass_warden_callback = false
     Devise.masquerade_routes_back = false # if true, route back to the page the user was on via redirect_back
+    Devise.masquerading_resource_class = User
+    Devise.masqueraded_resource_class = AdminUser
 ```
 
 ## Demo project

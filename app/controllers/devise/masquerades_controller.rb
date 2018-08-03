@@ -118,11 +118,13 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def after_back_masquerade_path_for(resource)
-    "/"
+    '/'
   end
 
   def save_masquerade_owner_session
-    session[session_key] = send("current_#{masquerading_resource_name}").id unless session.key? session_key
+    unless session.key?(session_key)
+      session[session_key] = send("current_#{masquerading_resource_name}").id
+    end
   end
 
   def cleanup_masquerade_owner_session
