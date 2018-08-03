@@ -74,7 +74,7 @@ class Devise::MasqueradesController < DeviseController
   def masquerade_authorized?
     true
   end
-  
+
   def find_resource
     masqueraded_resource_class.to_adapter.find_first(:id => params[:id])
   end
@@ -86,7 +86,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def masqueraded_resource_name
-    Devise.masqueraded_resource_name || resource_name
+    Devise.masqueraded_resource_name || masqueraded_resource_class.model_name.param_key
   end
 
   def masquerading_resource_class
@@ -94,7 +94,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def masquerading_resource_name
-    Devise.masquerading_resource_name || resource_name
+    Devise.masquerading_resource_name || masquerading_resource_class.model_name.param_key
   end
 
   def authenticate_scope!
