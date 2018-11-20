@@ -109,6 +109,18 @@ In your view:
     end
 ```
 
+## Custom url redirect after finishing masquerade:
+
+```ruby
+    class Admin::MasqueradesController < Devise::MasqueradesController
+      protected
+
+      def after_back_masquerade_path_for(resource)
+        "/custom_url"
+      end
+    end
+```
+
 ## Overriding the finder
 
 For example, if you use FriendlyId:
