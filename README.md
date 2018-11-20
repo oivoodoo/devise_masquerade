@@ -115,7 +115,7 @@ In your view:
     class Admin::MasqueradesController < Devise::MasqueradesController
       protected
 
-      def after__back_masquerade_path_for(resource)
+      def after_back_masquerade_path_for(resource)
         "/custom_url"
       end
     end
