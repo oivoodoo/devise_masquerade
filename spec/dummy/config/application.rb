@@ -16,6 +16,8 @@ module Dummy
     config.encoding = "utf-8"
 
     config.filter_parameters += [:password]
+
+    config.eager_load = false
   end
 end
 

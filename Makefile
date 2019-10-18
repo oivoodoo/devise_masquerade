@@ -1,6 +1,6 @@
 setup:
 	cd spec/dummy && \
-	RAILS_ENV=test rake db:setup
+	RAILS_ENV=test bundle exec rake db:setup
 .PHONY: setup
 
 rspec:

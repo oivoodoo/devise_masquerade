@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.email         = ['alex.korsak@gmail.com']
   gem.description   = 'devise masquerade library'
   gem.summary       = 'use for login as functionallity on your admin users pages'
-  gem.homepage      = 'http://github.com/oivoodoo/devise_masquerade/'
+  gem.homepage      = 'http://github.com/oivoodoo/devise_masquerade'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency('bundler', '>= 1.1.0')
 
-  gem.add_runtime_dependency('railties', '>= 3.0')
-  gem.add_runtime_dependency('devise', '>= 2.1.0')
+  gem.add_runtime_dependency('railties', '>= 5.2.0')
+  gem.add_runtime_dependency('devise', '>= 4.7.0')
+  gem.add_runtime_dependency('zeitwerk', '>= 2.2.0')
 end

@@ -12,7 +12,7 @@ describe Devise::MasqueradesController, type: :controller do
 
         before do
           expect(SecureRandom).to receive(:urlsafe_base64) { "secure_key" }
-          get :show, :id => mask.to_param
+          get :show, params: { :id => mask.to_param }
         end
 
         it { expect(session.keys).to include('devise_masquerade_user') }
@@ -37,18 +37,22 @@ describe Devise::MasqueradesController, type: :controller do
             context '< Rails 5 version' do
               before do
                 @request.env['HTTP_REFERER'] = 'previous_location'
-                get :show, id: mask.to_param
+                get :show, params: { id: mask.to_param }
               end # before
 
               it { should redirect_to('previous_location') }
             end # context
 
             context '< Rails 5, fallback if http_referer not present' do
+              before { Devise.masquerade_routes_back = true }
+
               before do
                 allow_any_instance_of(described_class).to receive(:after_masquerade_path_for).and_return("/dashboard?color=red")
               end
 
-              before { get :show, id: mask.to_param }
+              after { Devise.masquerade_routes_back = false }
+
+              before { get :show, params: { id: mask.to_param } }
 
               it { should redirect_to("/dashboard?color=red&masquerade=secure_key") }
             end # context
@@ -73,7 +77,7 @@ describe Devise::MasqueradesController, type: :controller do
     end
 
     context 'when not logged in' do
-      before { get :show, :id => 'any_id' }
+      before { get :show, params: { :id => 'any_id' } }
 
       it { should redirect_to(new_user_session_path) }
     end

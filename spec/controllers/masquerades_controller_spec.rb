@@ -13,7 +13,7 @@ describe MasqueradesController, type: :controller do
 
     let(:mask) { create(:user) }
 
-    before { get :show, :id => mask.to_param }
+    before { get :show, params: { :id => mask.to_param } }
 
     it { expect(response.status).to eq(403) }
     it { expect(session.keys).not_to include('devise_masquerade_user') }
@@ -32,7 +32,7 @@ describe MasqueradesController, type: :controller do
 
     before do
       expect(SecureRandom).to receive(:urlsafe_base64) { "secure_key" }
-      get :show, :id => mask.to_param
+      get :show, params: { :id => mask.to_param }
     end
 
     it { expect(response.status).to eq(302) }

@@ -50,5 +50,3 @@ module DeviseMasquerade
     end
   end
 end
-
-ActionController::Base.send(:include, DeviseMasquerade::Controllers::Helpers)

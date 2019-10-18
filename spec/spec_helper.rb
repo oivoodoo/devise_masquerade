@@ -6,7 +6,7 @@ require 'devise_masquerade'
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require 'rails/test_help'
 require 'rspec/rails'
-require 'factory_girl'
+require 'factory_bot'
 require 'database_cleaner'
 
 Rails.backtrace_cleaner.remove_silencers!
@@ -18,9 +18,9 @@ RSpec.configure do |config|
   require 'rspec/expectations'
   config.include RSpec::Matchers
 
-  config.include Devise::TestHelpers, :type => :controller
+  config.include Devise::Test::ControllerHelpers, :type => :controller
   config.include Warden::Test::Helpers
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include Authentication
 
   config.raise_errors_for_deprecations!

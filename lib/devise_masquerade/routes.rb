@@ -1,7 +1,5 @@
-module ActionDispatch::Routing
-  class Mapper
-
-    protected
+module DeviseMasquerade
+  module Routes
 
     def devise_masquerade(mapping, controllers)
       resources :masquerade,
@@ -12,6 +10,8 @@ module ActionDispatch::Routing
         get :back, :on => :collection
       end
     end
+
   end
 end
 
+ActionDispatch::Routing::Mapper.send :include, DeviseMasquerade::Routes

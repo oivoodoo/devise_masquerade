@@ -1,42 +1,24 @@
 class Devise::MasqueradesController < DeviseController
-  if respond_to?(:prepend_before_action)
-    prepend_before_action :authenticate_scope!, :masquerade_authorize!
-  else
-    prepend_before_filter :authenticate_scope!, :masquerade_authorize!
-  end
+  prepend_before_action :authenticate_scope!, :masquerade_authorize!
 
-  if respond_to?(:before_action)
-    before_action :save_masquerade_owner_session, :only => :show
-  else
-    before_filter :save_masquerade_owner_session, :only => :show
-  end
+  before_action :save_masquerade_owner_session, :only => :show
 
-  if respond_to?(:after_action)
-    after_action :cleanup_masquerade_owner_session, :only => :back
-  else
-    after_filter :cleanup_masquerade_owner_session, :only => :back
-  end
+  after_action :cleanup_masquerade_owner_session, :only => :back
 
   def show
     self.resource = find_resource
 
-    unless self.resource
+    unless resource
       flash[:error] = "#{masqueraded_resource_class} not found."
       redirect_to(new_user_session_path) and return
     end
 
-    self.resource.masquerade!
+    resource.masquerade!
     request.env["devise.skip_trackable"] = "1"
 
-    masquerade_sign_in(self.resource)
+    masquerade_sign_in(resource)
 
-    if Devise.masquerade_routes_back && Rails::VERSION::MAJOR == 5
-      redirect_back(fallback_location: after_masquerade_full_path_for(resource))
-    elsif Devise.masquerade_routes_back && request.env['HTTP_REFERER'].present?
-      redirect_to :back
-    else
-      redirect_to(after_masquerade_full_path_for(resource))
-    end
+    go_back(resource)
   end
 
   def back
@@ -55,14 +37,7 @@ class Devise::MasqueradesController < DeviseController
     masquerade_sign_in(owner_user)
     request.env["devise.skip_trackable"] = nil
 
-    if Devise.masquerade_routes_back && Rails::VERSION::MAJOR == 5
-      # If using the masquerade_routes_back and Rails 5
-      redirect_back(fallback_location: after_back_masquerade_path_for(owner_user))
-    elsif Devise.masquerade_routes_back && request.env['HTTP_REFERER'].present?
-      redirect_to :back
-    else
-      redirect_to after_back_masquerade_path_for(owner_user)
-    end
+    go_back(owner_user)
   end
 
   protected
@@ -77,6 +52,15 @@ class Devise::MasqueradesController < DeviseController
 
   def find_resource
     masqueraded_resource_class.to_adapter.find_first(:id => params[:id])
+  end
+
+  def go_back(owner_user)
+    if Devise.masquerade_routes_back
+      redirect_back(
+        fallback_location: after_back_masquerade_path_for(owner_user))
+    else
+      redirect_to after_back_masquerade_path_for(owner_user)
+    end
   end
 
   private
