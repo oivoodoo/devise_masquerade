@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.license = 'MIT'
 
-  gem.add_development_dependency('bundler', '>= 1.1.0')
+  gem.add_development_dependency('bundler', '>= 2.0.0')
 
   gem.add_runtime_dependency('railties', '>= 5.2.0')
   gem.add_runtime_dependency('devise', '>= 4.7.0')
