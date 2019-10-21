@@ -1,3 +1,7 @@
+release:
+	bundle exec rake release
+.PHONY: release
+
 setup:
 	cd spec/dummy && \
 	bundle exec rails db:environment:set RAILS_ENV=test && \
