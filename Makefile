@@ -1,6 +1,7 @@
 setup:
 	cd spec/dummy && \
-	RAILS_ENV=test bundle exec rake db:setup
+	bundle exec rails db:environment:set RAILS_ENV=test && \
+	RAILS_ENV=test bundle exec rails db:setup
 .PHONY: setup
 
 rspec:
