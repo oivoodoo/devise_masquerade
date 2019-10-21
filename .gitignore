@@ -18,4 +18,4 @@ spec/dummy/db/*.sqlite3
 tmp
 tags
 .vimrc
-
+vendor/
