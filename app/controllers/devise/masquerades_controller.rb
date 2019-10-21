@@ -1,9 +1,9 @@
 class Devise::MasqueradesController < DeviseController
   prepend_before_action :authenticate_scope!, :masquerade_authorize!
 
-  before_action :save_masquerade_owner_session, :only => :show
+  before_action :save_masquerade_owner_session, only: :show
 
-  after_action :cleanup_masquerade_owner_session, :only => :back
+  after_action :cleanup_masquerade_owner_session, only: :back
 
   def show
     self.resource = find_resource
@@ -18,26 +18,26 @@ class Devise::MasqueradesController < DeviseController
 
     masquerade_sign_in(resource)
 
-    go_back(resource)
+    go_back(resource, path: after_masquerade_full_path_for(resource))
   end
 
   def back
     user_id = session[session_key]
 
-    owner_user = if user_id.present?
-                   masquerading_resource_class.to_adapter.find_first(:id => user_id)
-                 else
-                   send(:"current_#{masquerading_resource_name}")
-                 end
+    resource = if user_id.present?
+      masquerading_resource_class.to_adapter.find_first(:id => user_id)
+    else
+      send(:"current_#{masquerading_resource_name}")
+    end
 
     if masquerading_resource_class != masqueraded_resource_class
       sign_out(send("current_#{masqueraded_resource_name}"))
     end
 
-    masquerade_sign_in(owner_user)
-    request.env["devise.skip_trackable"] = nil
+    masquerade_sign_in(resource)
+    request.env['devise.skip_trackable'] = nil
 
-    go_back(owner_user)
+    go_back(resource, path: after_back_masquerade_path_for(resource))
   end
 
   protected
@@ -51,15 +51,14 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def find_resource
-    masqueraded_resource_class.to_adapter.find_first(:id => params[:id])
+    masqueraded_resource_class.to_adapter.find_first(id: params[:id])
   end
 
-  def go_back(owner_user)
+  def go_back(user, path:)
     if Devise.masquerade_routes_back
-      redirect_back(
-        fallback_location: after_back_masquerade_path_for(owner_user))
+      redirect_back(fallback_location: path)
     else
-      redirect_to after_back_masquerade_path_for(owner_user)
+      redirect_to path
     end
   end
 
@@ -82,11 +81,11 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def authenticate_scope!
-    send(:"authenticate_#{masquerading_resource_name}!", :force => true)
+    send(:"authenticate_#{masquerading_resource_name}!", force: true)
   end
 
   def after_masquerade_path_for(resource)
-    "/"
+    '/'
   end
 
   def after_masquerade_full_path_for(resource)

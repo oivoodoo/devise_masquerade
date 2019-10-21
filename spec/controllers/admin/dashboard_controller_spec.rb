@@ -9,7 +9,7 @@ describe Admin::DashboardController, type: :controller do
 
       before do
         user.masquerade!
-        get :index, :masquerade => user.masquerade_key
+        get :index, params: { masquerade: user.masquerade_key }
       end
 
       it { expect(current_admin_user.reload).to eq(user) }

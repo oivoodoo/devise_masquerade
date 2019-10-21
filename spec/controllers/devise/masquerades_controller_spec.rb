@@ -12,7 +12,7 @@ describe Devise::MasqueradesController, type: :controller do
 
         before do
           expect(SecureRandom).to receive(:urlsafe_base64) { "secure_key" }
-          get :show, params: { :id => mask.to_param }
+          get :show, params: { id: mask.to_param }
         end
 
         it { expect(session.keys).to include('devise_masquerade_user') }
@@ -29,12 +29,14 @@ describe Devise::MasqueradesController, type: :controller do
 
         # Configure masquerade_routes_back setting
         describe 'config#masquerade_routes_back' do
-          before { Devise.setup {|c| c.masquerade_routes_back = true } }
+          before { Devise.setup { |c| c.masquerade_routes_back = true } }
+
+          after { Devise.masquerade_routes_back = false }
 
           context 'show' do
             before { expect(SecureRandom).to receive(:urlsafe_base64) { "secure_key" } }
 
-            context '< Rails 5 version' do
+            context 'with http referrer' do
               before do
                 @request.env['HTTP_REFERER'] = 'previous_location'
                 get :show, params: { id: mask.to_param }
@@ -43,14 +45,11 @@ describe Devise::MasqueradesController, type: :controller do
               it { should redirect_to('previous_location') }
             end # context
 
-            context '< Rails 5, fallback if http_referer not present' do
-              before { Devise.masquerade_routes_back = true }
-
+            context 'no http referrer' do
               before do
-                allow_any_instance_of(described_class).to receive(:after_masquerade_path_for).and_return("/dashboard?color=red")
+                allow_any_instance_of(described_class).to(
+                  receive(:after_masquerade_path_for).and_return("/dashboard?color=red"))
               end
-
-              after { Devise.masquerade_routes_back = false }
 
               before { get :show, params: { id: mask.to_param } }
 
@@ -77,7 +76,7 @@ describe Devise::MasqueradesController, type: :controller do
     end
 
     context 'when not logged in' do
-      before { get :show, params: { :id => 'any_id' } }
+      before { get :show, params: { id: 'any_id' } }
 
       it { should redirect_to(new_user_session_path) }
     end

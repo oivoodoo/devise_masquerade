@@ -19,9 +19,12 @@ group :test do
   gem 'guard-bundler'
   gem 'guard-cucumber'
 
-  gem 'rspec-rails'
   gem 'rspec'
-  gem 'rspec-mocks'
+  gem 'rspec-core', github: 'rspec/rspec-core'
+  gem 'rspec-expectations', github: 'rspec/rspec-expectations'
+  gem 'rspec-mocks', github: 'rspec/rspec-mocks'
+  gem 'rspec-rails', github: 'rspec/rspec-rails', branch: '4-0-maintenance'
+  gem 'rspec-support', github: 'rspec/rspec-support'
 
   gem 'shoulda'
   gem 'rb-fsevent'

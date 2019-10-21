@@ -1,20 +1,17 @@
 module DeviseMasquerade
   module Models
     module Masqueradable
-      def self.included(base)
-        base.class_eval do
-          attr_reader :masquerade_key
+      extend ActiveSupport::Concern
 
-          include InstanceMethods
-          extend ClassMethods
-        end
-      end
+      included do
+        attr_reader :masquerade_key
 
-      module InstanceMethods
         def masquerade!
-          @masquerade_key = SecureRandom.urlsafe_base64(Devise.masquerade_key_size)
+          @masquerade_key = SecureRandom.urlsafe_base64(
+            Devise.masquerade_key_size)
           cache_key = self.class.cache_masquerade_key_by(@masquerade_key)
-          ::Rails.cache.write(cache_key, id, :expires_in => Devise.masquerade_expires_in)
+          ::Rails.cache.write(
+            cache_key, id, expires_in: Devise.masquerade_expires_in)
         end
       end
 
