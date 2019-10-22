@@ -24,5 +24,4 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency('railties', '>= 5.2.0')
   gem.add_runtime_dependency('devise', '>= 4.7.0')
-  gem.add_runtime_dependency('zeitwerk', '>= 2.2.0')
 end

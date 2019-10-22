@@ -5,15 +5,15 @@ describe DashboardController, type: :controller do
     before { logged_in }
 
     context 'and admin masquerade by user' do
-      let!(:user) { create(:user) }
+      let!(:mask) { create(:user) }
 
       before do
-        user.masquerade!
+        mask.masquerade!
 
-        get :index, params: { masquerade: user.masquerade_key }
+        get :index, params: { masquerade: mask.masquerade_key }
       end
 
-      it { expect(current_user.reload).to eq(user) }
+      it { expect(current_user.reload).to eq(mask) }
     end
   end
 end

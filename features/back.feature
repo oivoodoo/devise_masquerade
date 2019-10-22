@@ -13,4 +13,3 @@ Feature: Use back button for returning to the owner of the masquerade action.
 
     When I press back masquerade button
       Then I should be login as owner user
-

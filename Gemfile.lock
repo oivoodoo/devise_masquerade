@@ -40,13 +40,21 @@ GIT
   specs:
     rspec-support (3.10.0.pre)
 
+GIT
+  remote: https://github.com/rspec/rspec.git
+  revision: e1c2c6bd78c849d7956431331f32ba5092951dab
+  specs:
+    rspec (3.10.0.pre)
+      rspec-core (= 3.10.0.pre)
+      rspec-expectations (= 3.10.0.pre)
+      rspec-mocks (= 3.10.0.pre)
+
 PATH
   remote: .
   specs:
     devise_masquerade (1.0.0)
       devise (>= 4.7.0)
       railties (>= 5.2.0)
-      zeitwerk (>= 2.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -169,8 +177,10 @@ GEM
       cucumber (>= 1.3.0)
       guard-compat (~> 1.0)
       nenv (~> 0.1)
-    guard-rspec (1.2.2)
-      guard (>= 1.1)
+    guard-rspec (4.7.3)
+      guard (~> 2.1)
+      guard-compat (~> 1.1)
+      rspec (>= 2.99.0, < 4.0)
     i18n (1.7.0)
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
@@ -231,7 +241,6 @@ GEM
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    rspec (1.3.2)
     rubyzip (2.0.0)
     selenium-webdriver (3.142.6)
       childprocess (>= 0.5, < 4.0)
@@ -274,12 +283,12 @@ DEPENDENCIES
   guard
   guard-bundler
   guard-cucumber
-  guard-rspec
+  guard-rspec (~> 4.7)
   launchy
   pry
   pry-byebug
   rb-fsevent
-  rspec
+  rspec!
   rspec-core!
   rspec-expectations!
   rspec-mocks!

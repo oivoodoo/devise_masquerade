@@ -6,13 +6,34 @@ module DeviseMasquerade
         class_name = mapping.class_name
 
         class_eval <<-METHODS, __FILE__, __LINE__ + 1
+          def masquerade!
+            return if params["#{Devise.masquerade_param}"].blank?
+
+            klass = unless params[:masqueraded_resource_class].blank?
+              params[:masqueraded_resource_class].constantize
+            else
+              if Devise.masqueraded_resource_class
+                Devise.masqueraded_resource_class
+              elsif defined?(User)
+                User
+              end
+            end
+            return unless klass
+
+            resource = klass.find_by_masquerade_key(params["#{Devise.masquerade_param}"])
+
+            if resource
+              masquerade_sign_in(resource)
+            end
+          end
+
           def masquerade_#{name}!
             return if params["#{Devise.masquerade_param}"].blank?
 
-            #{name} = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"])
+            resource = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"])
 
-            if #{name}
-              masquerade_sign_in(#{name})
+            if resource
+              masquerade_sign_in(resource)
             end
           end
 

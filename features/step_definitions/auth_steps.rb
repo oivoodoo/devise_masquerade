@@ -8,3 +8,4 @@ Given /^I logged in$/ do
 
   click_on 'Log in'
 end
+

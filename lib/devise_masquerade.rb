@@ -1,8 +1,8 @@
-require 'zeitwerk'
-loader = Zeitwerk::Loader.for_gem
-loader.setup # ready!
-
 require 'devise'
+require 'devise_masquerade/version'
+require 'devise_masquerade/routes'
+require 'devise_masquerade/controllers/helpers'
+require 'devise_masquerade/controllers/url_helpers'
 require 'devise_masquerade/rails'
 
 module Devise

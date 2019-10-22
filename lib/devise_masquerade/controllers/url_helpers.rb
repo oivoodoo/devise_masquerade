@@ -4,12 +4,16 @@ module DeviseMasquerade
     module UrlHelpers
       def masquerade_path(resource, *args)
         scope = Devise::Mapping.find_scope!(resource)
-        send("#{scope}_masquerade_path", resource, *args)
+        opts = args.first || {}
+        opts.merge!(masqueraded_resource_class: resource.class.name)
+        send("#{scope}_masquerade_path", resource, opts, *args)
       end
 
       def back_masquerade_path(resource, *args)
         scope = Devise::Mapping.find_scope!(resource)
-        send("back_#{scope}_masquerade_index_path", *args)
+        opts = args.first || {}
+        opts.merge!(masqueraded_resource_class: resource.class.name)
+        send("back_#{scope}_masquerade_index_path", opts, *args)
       end
     end
 

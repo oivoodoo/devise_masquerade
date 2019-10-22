@@ -65,7 +65,13 @@ class Devise::MasqueradesController < DeviseController
   private
 
   def masqueraded_resource_class
-    Devise.masqueraded_resource_class || resource_class
+    @masqueraded_resource_class ||= begin
+      unless params[:masqueraded_resource_class].blank?
+        params[:masqueraded_resource_class].constantize
+      else
+        Devise.masqueraded_resource_class || resource_class
+      end
+    end
   end
 
   def masqueraded_resource_name
@@ -73,7 +79,13 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def masquerading_resource_class
-    Devise.masquerading_resource_class || resource_class
+    @masquerading_resource_class ||= begin
+      unless params[:masquerading_resource_class].blank?
+        params[:masquerading_resource_class].constantize
+      else
+        Devise.masquerading_resource_class || resource_class
+      end
+    end
   end
 
   def masquerading_resource_name
@@ -97,7 +109,11 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def after_masquerade_param_for(resource)
-    "#{Devise.masquerade_param}=#{resource.masquerade_key}"
+    [
+      "#{Devise.masquerade_param}=#{resource.masquerade_key}",
+      "masquerading_resource_class=#{masquerading_resource_class}",
+      "masqueraded_resource_class=#{masqueraded_resource_class}",
+    ].join('&')
   end
 
   def after_back_masquerade_path_for(resource)

@@ -7,6 +7,23 @@ describe Devise::MasqueradesController, type: :controller do
     context 'when logged in' do
       before { logged_in }
 
+      context 'with masqueradable_class param' do
+        let(:mask) { create(:student) }
+
+        before do
+          expect(SecureRandom).to receive(:urlsafe_base64) { "secure_key" }
+          get :show, params: { id: mask.to_param, masqueraded_resource_class: mask.class.name }
+        end
+
+        it { expect(session.keys).to include('devise_masquerade_student') }
+
+        it 'should have warden keys defined' do
+          expect(session["warden.user.student.key"].first.first).to eq(mask.id)
+        end
+
+        it { should redirect_to("/?masquerade=secure_key&masquerading_resource_class=User&masqueraded_resource_class=Student") }
+      end
+
       describe '#masquerade user' do
         let(:mask) { create(:user) }
 
@@ -17,7 +34,7 @@ describe Devise::MasqueradesController, type: :controller do
 
         it { expect(session.keys).to include('devise_masquerade_user') }
         it { expect(session["warden.user.user.key"].first.first).to eq(mask.id) }
-        it { should redirect_to("/?masquerade=secure_key") }
+        it { should redirect_to("/?masquerade=secure_key&masquerading_resource_class=User&masqueraded_resource_class=User") }
 
         context 'and back' do
           before { get :back }
@@ -53,17 +70,17 @@ describe Devise::MasqueradesController, type: :controller do
 
               before { get :show, params: { id: mask.to_param } }
 
-              it { should redirect_to("/dashboard?color=red&masquerade=secure_key") }
+              it { should redirect_to("/dashboard?color=red&masquerade=secure_key&masquerading_resource_class=User&masqueraded_resource_class=User") }
             end # context
           end # context
 
-          context '< Rails 5, and back' do
+          context 'and back' do
             before { get :back }
 
             it { should redirect_to(masquerade_page) }
           end # context
 
-          context '< Rails 5, and back fallback if http_referer not present' do
+          context 'and back fallback if http_referer not present' do
             before do
               @request.env['HTTP_REFERER'] = 'previous_location'
               get :back

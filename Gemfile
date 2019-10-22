@@ -15,11 +15,11 @@ group :test do
   gem 'pry-byebug'
 
   gem 'guard'
-  gem 'guard-rspec'
+  gem 'guard-rspec', '~> 4.7'
   gem 'guard-bundler'
   gem 'guard-cucumber'
 
-  gem 'rspec'
+  gem 'rspec', github: 'rspec/rspec'
   gem 'rspec-core', github: 'rspec/rspec-core'
   gem 'rspec-expectations', github: 'rspec/rspec-expectations'
   gem 'rspec-mocks', github: 'rspec/rspec-mocks'

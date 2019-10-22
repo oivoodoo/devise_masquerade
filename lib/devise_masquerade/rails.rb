@@ -1,17 +1,15 @@
-require 'devise_masquerade/routes'
-require 'devise_masquerade/models'
+# frozen_string_literal: true
 
 module DeviseMasquerade
   module Rails
 
     class Engine < ::Rails::Engine
-      ActiveSupport.on_load(:action_controller) do
-        include DeviseMasquerade::Controllers::Helpers
-        include DeviseMasquerade::Controllers::UrlHelpers
+      initializer "devise.url_helpers" do
+        Devise.include_helpers(DeviseMasquerade::Controllers)
       end
 
-      ActiveSupport.on_load(:action_view) do
-        include DeviseMasquerade::Controllers::UrlHelpers
+      ActiveSupport.on_load(:action_controller) do
+        include DeviseMasquerade::Controllers::Helpers
       end
     end
 

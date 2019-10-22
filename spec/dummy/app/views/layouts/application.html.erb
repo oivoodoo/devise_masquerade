@@ -8,7 +8,13 @@
   </head>
   <body>
     <% if signed_in? %>
-      <h1 class='current_user'><%= current_user.email %></h1>
+      <% if user_signed_in? %>
+        <h1 class='current_user'><%= current_user.email %></h1>
+      <% end %>
+
+      <% if student_signed_in? %>
+        <h1 class='current_student'><%= current_student.email %></h1>
+      <% end %>
 
       <% if user_masquerade? %>
         <%= link_to "Back masquerade", back_masquerade_path(current_user) %>
