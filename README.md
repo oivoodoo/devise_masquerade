@@ -33,6 +33,9 @@ In the view you can use url helper for defining link:
 
     = link_to "Login As", masquerade_path(user)
 
+`masquerade_path` would create specific `/masquerade` path with query params `masquerade`(key) and `masqueraded_resource_class` to know
+which model to choose to search and sign in by masquerade key.
+
 In the model you'll need to add the parameter :masqueradable to the existing comma separated values in the devise method:
 
 ```ruby
@@ -44,6 +47,14 @@ Add into your application_controller.rb:
 ```ruby
     before_action :masquerade_user!
 ```
+
+or
+
+```ruby
+    before_action :masquerade!
+```
+
+`masquerade!` is generic way in case if you want to support multiple models on masquerade.
 
 Instead of user you can use your resource name admin, student or another names.
 
