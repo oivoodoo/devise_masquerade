@@ -1,4 +1,11 @@
 class Devise::MasqueradesController < DeviseController
+  Devise.mappings.each do |name, _|
+    class_eval <<-METHODS, __FILE__, __LINE__ + 1
+      skip_before_action :masquerade_#{name}!, raise: false
+    METHODS
+  end
+  skip_before_action :masquerade!, raise: false
+
   prepend_before_action :authenticate_scope!, :masquerade_authorize!
 
   before_action :save_masquerade_owner_session, only: :show
@@ -13,8 +20,7 @@ class Devise::MasqueradesController < DeviseController
       redirect_to(new_user_session_path) and return
     end
 
-    resource.masquerade!
-    request.env["devise.skip_trackable"] = "1"
+    request.env['devise.skip_trackable'] = '1'
 
     masquerade_sign_in(resource)
 
@@ -51,7 +57,10 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def find_resource
-    masqueraded_resource_class.to_adapter.find_first(id: params[:id])
+    masqueraded_resource_class.
+      find_by_masquerade_key(params[Devise.masquerade_param]).
+      where(id: params[:id]).
+      first
   end
 
   def go_back(user, path:)
@@ -69,7 +78,11 @@ class Devise::MasqueradesController < DeviseController
       unless params[:masqueraded_resource_class].blank?
         params[:masqueraded_resource_class].constantize
       else
-        Devise.masqueraded_resource_class || resource_class
+        unless session[session_key_masqueraded_resource_class].blank?
+          session[session_key_masquerading_resource_class].constantize
+        else
+          Devise.masqueraded_resource_class || resource_class
+        end
       end
     end
   end
@@ -83,7 +96,11 @@ class Devise::MasqueradesController < DeviseController
       unless params[:masquerading_resource_class].blank?
         params[:masquerading_resource_class].constantize
       else
-        Devise.masquerading_resource_class || resource_class
+        unless session[session_key_masquerading_resource_class].blank?
+          session[session_key_masquerading_resource_class].constantize
+        else
+          Devise.masquerading_resource_class || resource_class
+        end
       end
     end
   end
@@ -101,19 +118,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def after_masquerade_full_path_for(resource)
-    if after_masquerade_path_for(resource) =~ /\?/
-      "#{after_masquerade_path_for(resource)}&#{after_masquerade_param_for(resource)}"
-    else
-      "#{after_masquerade_path_for(resource)}?#{after_masquerade_param_for(resource)}"
-    end
-  end
-
-  def after_masquerade_param_for(resource)
-    [
-      "#{Devise.masquerade_param}=#{resource.masquerade_key}",
-      "masquerading_resource_class=#{masquerading_resource_class}",
-      "masqueraded_resource_class=#{masqueraded_resource_class}",
-    ].join('&')
+    after_masquerade_path_for(resource)
   end
 
   def after_back_masquerade_path_for(resource)
@@ -123,14 +128,26 @@ class Devise::MasqueradesController < DeviseController
   def save_masquerade_owner_session
     unless session.key?(session_key)
       session[session_key] = send("current_#{masquerading_resource_name}").id
+      session[session_key_masquerading_resource_class] = masquerading_resource_class.name
+      session[session_key_masqueraded_resource_class] = masqueraded_resource_class.name
     end
   end
 
   def cleanup_masquerade_owner_session
     session.delete(session_key)
+    session.delete(session_key_masqueraded_resource_class)
+    session.delete(session_key_masquerading_resource_class)
   end
 
   def session_key
     "devise_masquerade_#{masqueraded_resource_name}".to_sym
+  end
+
+  def session_key_masqueraded_resource_class
+    "devise_masquerade_masqueraded_resource_class"
+  end
+
+  def session_key_masquerading_resource_class
+    "devise_masquerade_masquerading_resource_class"
   end
 end

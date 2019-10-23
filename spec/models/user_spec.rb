@@ -31,7 +31,7 @@ describe User do
       allow(Rails.cache).to receive(:read).with("users:#{user.masquerade_key}:masquerade") { user.id }
       allow(Rails.cache).to receive(:delete).with("users:#{user.masquerade_key}:masquerade")
 
-      new_user = User.find_by_masquerade_key(user.masquerade_key)
+      new_user = User.find_by_masquerade_key(user.masquerade_key).first
 
       expect(new_user).to eq(user)
     end

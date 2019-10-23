@@ -10,7 +10,7 @@ module Devise
   @@masquerade_param = 'masquerade'
 
   mattr_accessor :masquerade_expires_in
-  @@masquerade_expires_in = 10.seconds
+  @@masquerade_expires_in = 1.minute
 
   mattr_accessor :masquerade_key_size
   @@masquerade_key_size = 16

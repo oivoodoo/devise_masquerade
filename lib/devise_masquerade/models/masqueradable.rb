@@ -30,7 +30,16 @@ module DeviseMasquerade
           # clean up the cached masquerade key value
           remove_masquerade_key!(key)
 
-          where(id: id).first
+          where(id: id)
+        end
+
+        def find_by_masquerade_key(key)
+          id = ::Rails.cache.read(cache_masquerade_key_by(key))
+
+          # clean up the cached masquerade key value
+          remove_masquerade_key!(key)
+
+          where(id: id)
         end
       end # ClassMethods
     end

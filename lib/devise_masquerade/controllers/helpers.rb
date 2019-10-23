@@ -20,7 +20,7 @@ module DeviseMasquerade
             end
             return unless klass
 
-            resource = klass.find_by_masquerade_key(params["#{Devise.masquerade_param}"])
+            resource = klass.find_by_masquerade_key(params["#{Devise.masquerade_param}"]).first
 
             if resource
               masquerade_sign_in(resource)
@@ -30,7 +30,7 @@ module DeviseMasquerade
           def masquerade_#{name}!
             return if params["#{Devise.masquerade_param}"].blank?
 
-            resource = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"])
+            resource = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"]).first
 
             if resource
               masquerade_sign_in(resource)
@@ -43,7 +43,7 @@ module DeviseMasquerade
 
           def #{name}_masquerade_owner
             return nil unless send(:#{name}_masquerade?)
-            ::#{class_name}.to_adapter.find_first(:id => session[:"devise_masquerade_#{name}"])
+            ::#{class_name}.to_adapter.find_first(id: session[:"devise_masquerade_#{name}"])
           end
 
           private
@@ -53,7 +53,7 @@ module DeviseMasquerade
               if respond_to?(:bypass_sign_in)
                 bypass_sign_in(resource)
               else
-                sign_in(resource, :bypass => true)
+                sign_in(resource, bypass: true)
               end
             else
               sign_in(resource)

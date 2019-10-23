@@ -42,7 +42,8 @@ In the model you'll need to add the parameter :masqueradable to the existing com
     devise :invitable, :confirmable, :database_authenticatable, :registerable, :masqueradable
 ```
 
-Add into your application_controller.rb:
+Add into your `application_controller.rb` if you want to have custom way on sign in by using masquerade token otherwise you can still
+use only `masquerade_path` in your view to generate temporary token and link to make `Login As`:
 
 ```ruby
     before_action :masquerade_user!
