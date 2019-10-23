@@ -52,7 +52,7 @@ GIT
 PATH
   remote: .
   specs:
-    devise_masquerade (1.1.0)
+    devise_masquerade (1.2.0)
       devise (>= 4.7.0)
       railties (>= 5.2.0)
 
