@@ -179,6 +179,14 @@ in `routes.rb`:
 And check http://localhost:3000/, use for login user1@example.com and
 'password'
 
+## Troubleshooting
+
+Are you working in development mode and wondering why masquerade attempts result in a [Receiving "You are already signed in" flash[:error]](https://github.com/oivoodoo/devise_masquerade/issues/58) message? `Filter chain halted as :require_no_authentication rendered or redirected` showing up in your logfile? Chances are that you need to enable caching:
+
+    rails dev:cache
+
+This is a one-time operation, so you can set it and forget it. Should you ever need to disable caching in development, you can re-run the command as required.
+
 ## Test project
 
     make test
