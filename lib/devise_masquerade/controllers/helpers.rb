@@ -20,7 +20,7 @@ module DeviseMasquerade
             end
             return unless klass
 
-            resource = klass.find_by_masquerade_key(params["#{Devise.masquerade_param}"]).first
+            resource = GlobalID::Locator.locate_signed params[Devise.masquerade_param], for: 'masquerade'
 
             if resource
               masquerade_sign_in(resource)
@@ -30,7 +30,7 @@ module DeviseMasquerade
           def masquerade_#{name}!
             return if params["#{Devise.masquerade_param}"].blank?
 
-            resource = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"]).first
+            resource = GlobalID::Locator.locate_signed params[Devise.masquerade_param], for: 'masquerade'
 
             if resource
               masquerade_sign_in(resource)
