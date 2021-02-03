@@ -8,8 +8,6 @@ describe DashboardController, type: :controller do
       let!(:mask) { create(:user) }
 
       before do
-        mask.masquerade!
-
         get :index, params: { masquerade: mask.masquerade_key }
       end
 

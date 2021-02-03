@@ -54,6 +54,7 @@ PATH
   specs:
     devise_masquerade (1.2.0)
       devise (>= 4.7.0)
+      globalid (>= 0.3.6)
       railties (>= 5.2.0)
 
 GEM
@@ -301,4 +302,4 @@ DEPENDENCIES
   test-unit
 
 BUNDLED WITH
-   2.0.2
+   2.1.4

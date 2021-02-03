@@ -20,7 +20,7 @@ module DeviseMasquerade
             end
             return unless klass
 
-            resource = klass.find_by_masquerade_key(params["#{Devise.masquerade_param}"]).first
+            resource = GlobalID::Locator.locate_signed params[Devise.masquerade_param], for: 'masquerade'
 
             if resource
               masquerade_sign_in(resource)
@@ -30,7 +30,7 @@ module DeviseMasquerade
           def masquerade_#{name}!
             return if params["#{Devise.masquerade_param}"].blank?
 
-            resource = ::#{class_name}.find_by_masquerade_key(params["#{Devise.masquerade_param}"]).first
+            resource = GlobalID::Locator.locate_signed params[Devise.masquerade_param], for: 'masquerade'
 
             if resource
               masquerade_sign_in(resource)
@@ -38,12 +38,12 @@ module DeviseMasquerade
           end
 
           def #{name}_masquerade?
-            session[:"devise_masquerade_#{name}"].present?
+            ::Rails.cache.exist?(:"devise_masquerade_#{name}").present?
           end
 
           def #{name}_masquerade_owner
             return nil unless send(:#{name}_masquerade?)
-            ::#{class_name}.to_adapter.find_first(id: session[:"devise_masquerade_#{name}"])
+            GlobalID::Locator.locate_signed(Rails.cache.read(:"devise_masquerade_#{name}"), for: 'masquerade')
           end
 
           private

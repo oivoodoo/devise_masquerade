@@ -13,12 +13,10 @@ describe MasqueradesTestsController, type: :controller do
 
     let(:mask) { create(:user) }
 
-    before { mask.masquerade! }
-
     before { get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key } }
 
     it { expect(response.status).to eq(403) }
-    it { expect(session.keys).not_to include('devise_masquerade_user') }
+    it { expect(Rails.cache.read('devise_masquerade_user')).not_to be }
     it { expect(session['warden.user.user.key'].first.first).not_to eq(mask.id) }
   end
 
@@ -32,14 +30,12 @@ describe MasqueradesTestsController, type: :controller do
 
     let(:mask) { create(:user) }
 
-    before { mask.masquerade! }
-
     before do
       get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
     end
 
     it { expect(response.status).to eq(302) }
-    it { expect(session.keys).to include('devise_masquerade_user') }
+    it { expect(Rails.cache.read('devise_masquerade_user')).to be }
     it { expect(session['warden.user.user.key'].first.first).to eq(mask.id) }
   end
 end

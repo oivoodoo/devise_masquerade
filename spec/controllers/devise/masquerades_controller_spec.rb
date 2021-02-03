@@ -10,13 +10,11 @@ describe Devise::MasqueradesController, type: :controller do
       context 'with masqueradable_class param' do
         let(:mask) { create(:student) }
 
-        before { mask.masquerade! }
-
         before do
           get :show, params: { id: mask.to_param, masqueraded_resource_class: mask.class.name, masquerade: mask.masquerade_key }
         end
 
-        it { expect(session.keys).to include('devise_masquerade_student') }
+        it { expect(Rails.cache.read('devise_masquerade_student')).to be }
 
         it 'should have warden keys defined' do
           expect(session["warden.user.student.key"].first.first).to eq(mask.id)
@@ -28,13 +26,11 @@ describe Devise::MasqueradesController, type: :controller do
       describe '#masquerade user' do
         let(:mask) { create(:user) }
 
-        before { mask.masquerade! }
-
         before do
           get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
         end
 
-        it { expect(session.keys).to include('devise_masquerade_user') }
+        it { expect(Rails.cache.read('devise_masquerade_user')).to be }
         it { expect(session["warden.user.user.key"].first.first).to eq(mask.id) }
         it { should redirect_to('/') }
 
@@ -43,7 +39,7 @@ describe Devise::MasqueradesController, type: :controller do
 
           it { should redirect_to(masquerade_page) }
           it { expect(current_user.reload).to eq(@user) }
-          it { expect(session.keys).not_to include('devise_masquerade_user') }
+          it { expect(Rails.cache.read('devise_masquerade_user')).not_to be }
         end
       end
 
@@ -54,8 +50,6 @@ describe Devise::MasqueradesController, type: :controller do
         before { Devise.setup { |c| c.masquerade_routes_back = true } }
 
         after { Devise.masquerade_routes_back = false }
-
-        before { mask.masquerade! }
 
         context 'show' do
           context 'with http referrer' do
@@ -80,13 +74,19 @@ describe Devise::MasqueradesController, type: :controller do
         end # context
 
         context 'and back' do
-          before { get :back }
+          before do
+            get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
+
+            get :back
+          end
 
           it { should redirect_to(masquerade_page) }
         end # context
 
         context 'and back fallback if http_referer not present' do
           before do
+            get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
+
             @request.env['HTTP_REFERER'] = 'previous_location'
             get :back
           end
