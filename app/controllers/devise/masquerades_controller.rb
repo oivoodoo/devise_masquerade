@@ -57,10 +57,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def find_resource
-    masqueraded_resource_class.
-      find_by_masquerade_key(params[Devise.masquerade_param]).
-      where(id: params[:id]).
-      first
+    GlobalID::Locator.locate_signed params[Devise.masquerade_param], for: 'masquerade'
   end
 
   def go_back(user, path:)

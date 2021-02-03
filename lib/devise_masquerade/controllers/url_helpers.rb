@@ -10,7 +10,6 @@ module DeviseMasquerade
         opts = args.first || {}
         opts.merge!(masqueraded_resource_class: resource.class.name)
 
-        resource.masquerade!
         opts.merge!(Devise.masquerade_param => resource.masquerade_key)
 
         send("#{scope}_masquerade_path", resource, opts, *args)

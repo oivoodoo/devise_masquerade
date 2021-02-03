@@ -13,8 +13,6 @@ describe MasqueradesTestsController, type: :controller do
 
     let(:mask) { create(:user) }
 
-    before { mask.masquerade! }
-
     before { get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key } }
 
     it { expect(response.status).to eq(403) }
@@ -31,8 +29,6 @@ describe MasqueradesTestsController, type: :controller do
     before { logged_in }
 
     let(:mask) { create(:user) }
-
-    before { mask.masquerade! }
 
     before do
       get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }

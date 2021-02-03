@@ -10,8 +10,6 @@ describe Devise::MasqueradesController, type: :controller do
       context 'with masqueradable_class param' do
         let(:mask) { create(:student) }
 
-        before { mask.masquerade! }
-
         before do
           get :show, params: { id: mask.to_param, masqueraded_resource_class: mask.class.name, masquerade: mask.masquerade_key }
         end
@@ -27,8 +25,6 @@ describe Devise::MasqueradesController, type: :controller do
 
       describe '#masquerade user' do
         let(:mask) { create(:user) }
-
-        before { mask.masquerade! }
 
         before do
           get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
@@ -54,8 +50,6 @@ describe Devise::MasqueradesController, type: :controller do
         before { Devise.setup { |c| c.masquerade_routes_back = true } }
 
         after { Devise.masquerade_routes_back = false }
-
-        before { mask.masquerade! }
 
         context 'show' do
           context 'with http referrer' do

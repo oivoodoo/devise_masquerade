@@ -8,8 +8,6 @@ describe Admin::DashboardController, type: :controller do
       let!(:mask) { create(:admin_user) }
 
       before do
-        mask.masquerade!
-
         get :index, params: { masquerade: mask.masquerade_key, masqueraded_resource_class: 'Admin::User' }
       end
 
