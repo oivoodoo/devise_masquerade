@@ -38,12 +38,12 @@ module DeviseMasquerade
           end
 
           def #{name}_masquerade?
-            session[:"devise_masquerade_#{name}"].present?
+            ::Rails.cache.exist?(:"devise_masquerade_#{name}").present?
           end
 
           def #{name}_masquerade_owner
             return nil unless send(:#{name}_masquerade?)
-            ::#{class_name}.to_adapter.find_first(id: session[:"devise_masquerade_#{name}"])
+            GlobalID::Locator.locate_signed(Rails.cache.read(:"devise_masquerade_#{name}"), for: 'masquerade')
           end
 
           private

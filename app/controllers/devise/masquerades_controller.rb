@@ -28,15 +28,9 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def back
-    user_id = session[session_key]
+    self.resource = find_owner_resource
 
-    resource = if user_id.present?
-      masquerading_resource_class.to_adapter.find_first(:id => user_id)
-    else
-      send(:"current_#{masquerading_resource_name}")
-    end
-
-    if masquerading_resource_class != masqueraded_resource_class
+    if resource.class != masqueraded_resource_class
       sign_out(send("current_#{masqueraded_resource_name}"))
     end
 
@@ -58,6 +52,10 @@ class Devise::MasqueradesController < DeviseController
 
   def find_resource
     GlobalID::Locator.locate_signed params[Devise.masquerade_param], for: 'masquerade'
+  end
+
+  def find_owner_resource
+    GlobalID::Locator.locate_signed(Rails.cache.read(session_key), for: 'masquerade')
   end
 
   def go_back(user, path:)
@@ -123,15 +121,20 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def save_masquerade_owner_session
+    resource_gid = send("current_#{masquerading_resource_name}").to_sgid(
+      expires_in: Devise.masquerade_expires_in, for: 'masquerade')
+    # skip sharing owner id via session
+    Rails.cache.write(session_key, resource_gid, expires_in: Devise.masquerade_expires_in)
+
     unless session.key?(session_key)
-      session[session_key] = send("current_#{masquerading_resource_name}").id
       session[session_key_masquerading_resource_class] = masquerading_resource_class.name
       session[session_key_masqueraded_resource_class] = masqueraded_resource_class.name
     end
   end
 
   def cleanup_masquerade_owner_session
-    session.delete(session_key)
+    Rails.cache.delete(session_key)
+
     session.delete(session_key_masqueraded_resource_class)
     session.delete(session_key_masquerading_resource_class)
   end
