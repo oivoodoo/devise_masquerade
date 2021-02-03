@@ -3,11 +3,12 @@ module DeviseMasquerade
 
     def devise_masquerade(mapping, controllers)
       resources :masquerade,
-        only: :show,
         path: mapping.path_names[:masquerade],
-        controller: controllers[:masquerades] do
+        controller: controllers[:masquerades],
+        only: [] do
 
         collection do
+          get :show
           get :back
         end
       end

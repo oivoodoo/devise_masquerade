@@ -1,0 +1,7 @@
+<% @users.each do |user| %>
+  <p>
+    <%= user.email %>
+
+    <%= link_to "Login as", masquerade_path(user, key1: 'value1'), class: 'login_as' %>
+  </p>
+<% end %>
