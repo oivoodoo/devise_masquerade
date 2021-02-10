@@ -17,7 +17,7 @@
       <% end %>
 
       <% if user_masquerade? %>
-        <%= link_to "Back masquerade", back_masquerade_path(current_user) %>
+        <%= link_to "Back masquerade", back_masquerade_path(User.new) %>
       <% end %>
     <% end %>
 

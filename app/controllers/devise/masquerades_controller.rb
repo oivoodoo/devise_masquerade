@@ -6,7 +6,8 @@ class Devise::MasqueradesController < DeviseController
   end
   skip_before_action :masquerade!, raise: false
 
-  prepend_before_action :authenticate_scope!, :masquerade_authorize!
+  prepend_before_action :authenticate_scope!, only: :show
+  prepend_before_action :masquerade_authorize!
 
   before_action :save_masquerade_owner_session, only: :show
 
@@ -14,6 +15,10 @@ class Devise::MasqueradesController < DeviseController
 
   def show
     self.resource = find_resource
+
+    if resource.class != masquerading_resource_class
+      sign_out(send("current_#{masquerading_resource_name}"))
+    end
 
     unless resource
       flash[:error] = "#{masqueraded_resource_class} not found."
@@ -28,6 +33,10 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def back
+    unless send("#{masqueraded_resource_name}_signed_in?")
+      head(401) and return
+    end
+
     self.resource = find_owner_resource
 
     if resource.class != masqueraded_resource_class
