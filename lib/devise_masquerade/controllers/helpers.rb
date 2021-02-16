@@ -43,7 +43,7 @@ module DeviseMasquerade
 
           def #{name}_masquerade_owner
             return nil unless send(:#{name}_masquerade?)
-            GlobalID::Locator.locate_signed(Rails.cache.read(:"devise_masquerade_#{name}"), for: 'masquerade')
+            GlobalID::Locator.locate_signed(::Rails.cache.read(:"devise_masquerade_#{name}"), for: 'masquerade')
           end
 
           private
