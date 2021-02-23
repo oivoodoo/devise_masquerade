@@ -137,6 +137,7 @@ class Devise::MasqueradesController < DeviseController
 
     # skip sharing owner id via session
     Rails.cache.write(skey, resource_gid, expires_in: Devise.masquerade_expires_in)
+    session[skey] = true
     session[session_key_masquerading_resource_class] = masquerading_resource_class.name
     session[session_key_masqueraded_resource_class] = masqueraded_resource_class.name
   end
@@ -145,6 +146,7 @@ class Devise::MasqueradesController < DeviseController
     skey = session_key(masqueradable_resource)
 
     Rails.cache.delete(skey)
+    session.delete(skey)
     session.delete(session_key_masqueraded_resource_class)
     session.delete(session_key_masquerading_resource_class)
   end

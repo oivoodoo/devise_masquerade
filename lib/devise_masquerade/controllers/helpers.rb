@@ -41,6 +41,8 @@ module DeviseMasquerade
             return false if current_#{name}.blank?
 
             key = "devise_masquerade_#{name}_" + current_#{name}.to_param
+            return false if session[key].blank?
+
             ::Rails.cache.exist?(key.to_sym).present?
           end
 
