@@ -38,12 +38,17 @@ module DeviseMasquerade
           end
 
           def #{name}_masquerade?
-            ::Rails.cache.exist?(:"devise_masquerade_#{name}").present?
+            return false if current_#{name}.blank?
+
+            key = "devise_masquerade_#{name}_" + current_#{name}.to_param
+            ::Rails.cache.exist?(key.to_sym).present?
           end
 
           def #{name}_masquerade_owner
-            return nil unless send(:#{name}_masquerade?)
-            GlobalID::Locator.locate_signed(::Rails.cache.read(:"devise_masquerade_#{name}"), for: 'masquerade')
+            return unless send(:#{name}_masquerade?)
+
+            key = "devise_masquerade_#{name}_" + current_#{name}.to_param
+            GlobalID::Locator.locate_signed(::Rails.cache.read(key.to_sym, for: 'masquerade'))
           end
 
           private

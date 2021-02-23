@@ -16,7 +16,7 @@ describe MasqueradesTestsController, type: :controller do
     before { get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key } }
 
     it { expect(response.status).to eq(403) }
-    it { expect(Rails.cache.read('devise_masquerade_user')).not_to be }
+    it { expect(Rails.cache.read("devise_masquerade_user_#{mask.to_param}")).not_to be }
     it { expect(session['warden.user.user.key'].first.first).not_to eq(mask.id) }
   end
 
@@ -35,7 +35,7 @@ describe MasqueradesTestsController, type: :controller do
     end
 
     it { expect(response.status).to eq(302) }
-    it { expect(Rails.cache.read('devise_masquerade_user')).to be }
+    it { expect(Rails.cache.read("devise_masquerade_user_#{mask.to_param}")).to be }
     it { expect(session['warden.user.user.key'].first.first).to eq(mask.id) }
   end
 end

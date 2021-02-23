@@ -14,7 +14,7 @@ describe Devise::MasqueradesController, type: :controller do
           get :show, params: { id: mask.to_param, masqueraded_resource_class: mask.class.name, masquerade: mask.masquerade_key }
         end
 
-        it { expect(Rails.cache.read('devise_masquerade_student')).to be }
+        it { expect(Rails.cache.read("devise_masquerade_student_#{mask.to_param}")).to be }
 
         it 'should have warden keys defined' do
           expect(session["warden.user.student.key"].first.first).to eq(mask.id)
@@ -30,7 +30,7 @@ describe Devise::MasqueradesController, type: :controller do
           get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
         end
 
-        it { expect(Rails.cache.read('devise_masquerade_user')).to be }
+        it { expect(Rails.cache.read("devise_masquerade_user_#{mask.to_param}")).to be }
         it { expect(session["warden.user.user.key"].first.first).to eq(mask.id) }
         it { should redirect_to('/') }
 
@@ -39,7 +39,7 @@ describe Devise::MasqueradesController, type: :controller do
 
           it { should redirect_to(masquerade_page) }
           it { expect(current_user.reload).to eq(@user) }
-          it { expect(Rails.cache.read('devise_masquerade_user')).not_to be }
+          it { expect(Rails.cache.read("devise_masquerade_user_#{mask.to_param}")).not_to be }
         end
       end
 

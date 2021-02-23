@@ -9,16 +9,13 @@ class Devise::MasqueradesController < DeviseController
   prepend_before_action :authenticate_scope!, only: :show
   prepend_before_action :masquerade_authorize!
 
-  before_action :save_masquerade_owner_session, only: :show
-
-  after_action :cleanup_masquerade_owner_session, only: :back
-
   def show
-    self.resource = find_resource
+    masqueradable_resource = find_masqueradable_resource
 
-    if resource.class != masquerading_resource_class
-      sign_out(send("current_#{masquerading_resource_name}"))
-    end
+    save_masquerade_owner_session(masqueradable_resource)
+
+    self.resource = masqueradable_resource
+    sign_out(send("current_#{masquerading_resource_name}"))
 
     unless resource
       flash[:error] = "#{masqueraded_resource_class} not found."
@@ -33,20 +30,21 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def back
+    masqueradable_resource = send("current_#{masqueraded_resource_name}")
+
     unless send("#{masqueraded_resource_name}_signed_in?")
       head(401) and return
     end
 
-    self.resource = find_owner_resource
-
-    if resource.class != masqueraded_resource_class
-      sign_out(send("current_#{masqueraded_resource_name}"))
-    end
+    self.resource = find_owner_resource(masqueradable_resource)
+    sign_out(send("current_#{masqueraded_resource_name}"))
 
     masquerade_sign_in(resource)
     request.env['devise.skip_trackable'] = nil
 
     go_back(resource, path: after_back_masquerade_path_for(resource))
+
+    cleanup_masquerade_owner_session(masqueradable_resource)
   end
 
   protected
@@ -59,12 +57,14 @@ class Devise::MasqueradesController < DeviseController
     true
   end
 
-  def find_resource
-    GlobalID::Locator.locate_signed params[Devise.masquerade_param], for: 'masquerade'
+  def find_masqueradable_resource
+    GlobalID::Locator.locate_signed(params[Devise.masquerade_param], for: 'masquerade')
   end
 
-  def find_owner_resource
-    GlobalID::Locator.locate_signed(Rails.cache.read(session_key), for: 'masquerade')
+  def find_owner_resource(masqueradable_resource)
+    skey = session_key(masqueradable_resource)
+
+    GlobalID::Locator.locate_signed(Rails.cache.read(skey), for: 'masquerade')
   end
 
   def go_back(user, path:)
@@ -129,27 +129,28 @@ class Devise::MasqueradesController < DeviseController
     '/'
   end
 
-  def save_masquerade_owner_session
+  def save_masquerade_owner_session(masqueradable_resource)
+    skey = session_key(masqueradable_resource)
+
     resource_gid = send("current_#{masquerading_resource_name}").to_sgid(
       expires_in: Devise.masquerade_expires_in, for: 'masquerade')
-    # skip sharing owner id via session
-    Rails.cache.write(session_key, resource_gid, expires_in: Devise.masquerade_expires_in)
 
-    unless session.key?(session_key)
-      session[session_key_masquerading_resource_class] = masquerading_resource_class.name
-      session[session_key_masqueraded_resource_class] = masqueraded_resource_class.name
-    end
+    # skip sharing owner id via session
+    Rails.cache.write(skey, resource_gid, expires_in: Devise.masquerade_expires_in)
+    session[session_key_masquerading_resource_class] = masquerading_resource_class.name
+    session[session_key_masqueraded_resource_class] = masqueraded_resource_class.name
   end
 
-  def cleanup_masquerade_owner_session
-    Rails.cache.delete(session_key)
+  def cleanup_masquerade_owner_session(masqueradable_resource)
+    skey = session_key(masqueradable_resource)
 
+    Rails.cache.delete(skey)
     session.delete(session_key_masqueraded_resource_class)
     session.delete(session_key_masquerading_resource_class)
   end
 
-  def session_key
-    "devise_masquerade_#{masqueraded_resource_name}".to_sym
+  def session_key(masqueradable_resource)
+    "devise_masquerade_#{masqueraded_resource_name}_#{masqueradable_resource.to_param}".to_sym
   end
 
   def session_key_masqueraded_resource_class
@@ -157,6 +158,6 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def session_key_masquerading_resource_class
-    "devise_masquerade_masquerading_resource_class"
+      "devise_masquerade_masquerading_resource_class"
   end
 end
