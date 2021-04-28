@@ -50,7 +50,8 @@ module DeviseMasquerade
             return unless send(:#{name}_masquerade?)
 
             key = "devise_masquerade_#{name}_" + current_#{name}.to_param
-            GlobalID::Locator.locate_signed(::Rails.cache.read(key.to_sym, for: 'masquerade'))
+            sgid = ::Rails.cache.read(key.to_sym)
+            GlobalID::Locator.locate_signed(sgid, for: 'masquerade')
           end
 
           private
