@@ -10,41 +10,52 @@ class Devise::MasqueradesController < DeviseController
   prepend_before_action :masquerade_authorize!
 
   def show
-    masqueradable_resource = find_masqueradable_resource
+    if send("#{masqueraded_resource_name}_masquerade?")
+      resource = send("current_#{masquerading_resource_name}")
 
-    save_masquerade_owner_session(masqueradable_resource)
+      go_back(resource, path: after_masquerade_full_path_for(resource))
+    else
+      masqueradable_resource = find_masqueradable_resource
 
-    self.resource = masqueradable_resource
-    sign_out(send("current_#{masquerading_resource_name}"))
+      save_masquerade_owner_session(masqueradable_resource)
 
-    unless resource
-      flash[:error] = "#{masqueraded_resource_class} not found."
-      redirect_to(new_user_session_path) and return
+      resource = masqueradable_resource
+      sign_out(send("current_#{masquerading_resource_name}"))
+
+      unless resource
+        flash[:error] = "#{masqueraded_resource_class} not found."
+        redirect_to(new_user_session_path) and return
+      end
+
+      request.env['devise.skip_trackable'] = '1'
+
+      masquerade_sign_in(resource)
+
+      go_back(resource, path: after_masquerade_full_path_for(resource))
     end
-
-    request.env['devise.skip_trackable'] = '1'
-
-    masquerade_sign_in(resource)
-
-    go_back(resource, path: after_masquerade_full_path_for(resource))
   end
 
   def back
-    masqueradable_resource = send("current_#{masqueraded_resource_name}")
+    unless send("#{masqueraded_resource_name}_masquerade?")
+      resource = send("current_#{masqueraded_resource_name}")
+      go_back(resource, path: after_back_masquerade_path_for(resource))
+    else
+      masqueradable_resource = send("current_#{masqueraded_resource_name}")
 
-    unless send("#{masqueraded_resource_name}_signed_in?")
-      head(401) and return
+      unless send("#{masqueraded_resource_name}_signed_in?")
+        head(401) and return
+      end
+
+      resource = find_owner_resource(masqueradable_resource)
+      sign_out(send("current_#{masqueraded_resource_name}"))
+
+      sign_in(resource)
+      request.env['devise.skip_trackable'] = nil
+
+      go_back(resource, path: after_back_masquerade_path_for(resource))
+
+      cleanup_masquerade_owner_session(masqueradable_resource)
     end
-
-    self.resource = find_owner_resource(masqueradable_resource)
-    sign_out(send("current_#{masqueraded_resource_name}"))
-
-    masquerade_sign_in(resource)
-    request.env['devise.skip_trackable'] = nil
-
-    go_back(resource, path: after_back_masquerade_path_for(resource))
-
-    cleanup_masquerade_owner_session(masqueradable_resource)
   end
 
   protected
