@@ -1,6 +1,6 @@
 # Devise Masquerade
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/oivoodoo/devise_masquerade?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[Gitter](https://gitter.im/oivoodoo/devise_masquerade?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade?ref=badge_shield)
 
