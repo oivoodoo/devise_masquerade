@@ -2,10 +2,7 @@ language: ruby
 rvm:
   - 2.6.0
   - 2.7.3
-gemfile:
-  - Gemfile
 script: time ./script/travis.sh
-sudo: false
 addons:
   apt:
     packages:
