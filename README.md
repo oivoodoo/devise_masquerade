@@ -1,16 +1,16 @@
 # Devise Masquerade
 
-[Gitter](https://gitter.im/oivoodoo/devise_masquerade?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+ [![Gitter chat](https://badges.gitter.im/oivoodoo/devise_masquerade.svg)](https://gitter.im/oivoodoo/devise_masquerade?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Foivoodoo%2Fdevise_masquerade?ref=badge_shield)
 
-[![Build Status](https://secure.travis-ci.org/oivoodoo/devise_masquerade.png?branch=master)](https://travis-ci.org/oivoodoo/devise_masquerade)
+[![Build Status](https://secure.travis-ci.org/oivoodoo/devise_masquerade.svg?branch=master)](https://travis-ci.org/oivoodoo/devise_masquerade)
 
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/oivoodoo/devise_masquerade)
+[![Maintainability](https://api.codeclimate.com/v1/badges/cf63d775dc014a7ebc03/maintainability)](https://codeclimate.com/github/oivoodoo/devise_masquerade/maintainability)
 
 [![Analytics](https://ga-beacon.appspot.com/UA-46818771-1/devise_masquerade/README.md)](https://github.com/oivoodoo/devise_masquerade)
 
-[[Consulting](https://bitscorp.co)](https://bitscorp.co)
+[Consulting](https://bitscorp.co)
 
 It's a utility library for enabling functionallity like login as button for
 admin.
@@ -33,7 +33,9 @@ And then execute:
 
 In the view you can use url helper for defining link:
 
+```ruby
     = link_to "Login As", masquerade_path(user)
+```
 
 `masquerade_path` would create specific `/masquerade` path with query params `masquerade`(key) and `masqueraded_resource_class` to know
 which model to choose to search and sign in by masquerade key.
@@ -64,9 +66,11 @@ Instead of user you can use your resource name admin, student or another names.
 If you want to back to the owner of masquerade action user you could use
 helpers:
 
+```ruby
     user_masquerade? # current user was masqueraded by owner?
 
     = link_to "Reverse masquerade", back_masquerade_path(current_user)
+```
 
 ## Custom controller for adding cancan for authorization
 
