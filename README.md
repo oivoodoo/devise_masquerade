@@ -168,12 +168,12 @@ in `routes.rb`:
     Devise.masquerade_key_size = 16 # size of the generate by SecureRandom.urlsafe_base64
     Devise.masquerade_bypass_warden_callback = false
     Devise.masquerade_routes_back = false # if true, route back to the page the user was on via redirect_back
-    Devise.masquerading_resource_class = User
+    Devise.masquerading_resource_class = AdminUser
     # optional, default: masquerading_resource_class.model_name.param_key
-    Devise.masquerading_resource_name = :user
-    Devise.masqueraded_resource_class = AdminUser
+    Devise.masquerading_resource_name = :admin_user
+    Devise.masqueraded_resource_class = User
     # optional, default: masqueraded_resource_class.model_name.param_key
-    Devise.masqueraded_resource_name = :admin_user
+    Devise.masqueraded_resource_name = :user
 ```
 
 ## Demo project
@@ -187,7 +187,7 @@ And check http://localhost:3000/, use for login user1@example.com and
 
 ## Troubleshooting
 
-Are you working in development mode and wondering why masquerade attempts result in a [Receiving "You are already signed in" flash[:error]](https://github.com/oivoodoo/devise_masquerade/issues/58) message? `Filter chain halted as :require_no_authentication rendered or redirected` showing up in your logfile? Chances are that you need to enable caching:
+Are you working in development mode and wondering why masquerade attempts result in a [Receiving "You are already signed in" flash[:error]](https://github.com/oivoodoo/devise_masquerade/issues/58) message? `Filter chain halted as :require_no_authentication rendered or redirected` showing up in your logfile? Do you find that your `user_masquerade?` method is always returning false? Chances are that you need to enable caching:
 
     rails dev:cache
 
