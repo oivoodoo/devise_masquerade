@@ -1,3 +1,5 @@
+require 'securerandom'
+
 class Devise::MasqueradesController < DeviseController
   Devise.mappings.each do |name, _|
     class_eval <<-METHODS, __FILE__, __LINE__ + 1
@@ -11,7 +13,7 @@ class Devise::MasqueradesController < DeviseController
 
   def show
     if send("#{masqueraded_resource_name}_masquerade?")
-      resource = send("current_#{masquerading_resource_name}")
+      resource = masquerading_current_user
 
       go_back(resource, path: after_masquerade_full_path_for(resource))
     else
@@ -20,7 +22,7 @@ class Devise::MasqueradesController < DeviseController
       save_masquerade_owner_session(masqueradable_resource)
 
       resource = masqueradable_resource
-      sign_out(send("current_#{masquerading_resource_name}"))
+      sign_out(masquerading_current_user)
 
       unless resource
         flash[:error] = "#{masqueraded_resource_class} not found."
@@ -73,7 +75,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def find_owner_resource(masqueradable_resource)
-    skey = session_key(masqueradable_resource)
+    skey = session_key(masqueradable_resource, masquerading_guid)
 
     GlobalID::Locator.locate_signed(Rails.cache.read(skey), for: 'masquerade')
   end
@@ -141,7 +143,9 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def save_masquerade_owner_session(masqueradable_resource)
-    skey = session_key(masqueradable_resource)
+    guid = SecureRandom.uuid
+
+    skey = session_key(masqueradable_resource, guid)
 
     resource_gid = send("current_#{masquerading_resource_name}").to_sgid(for: 'masquerade')
 
@@ -150,19 +154,21 @@ class Devise::MasqueradesController < DeviseController
     session[skey] = true
     session[session_key_masquerading_resource_class] = masquerading_resource_class.name
     session[session_key_masqueraded_resource_class] = masqueraded_resource_class.name
+    session[session_key_masquerading_resource_guid] = guid
   end
 
   def cleanup_masquerade_owner_session(masqueradable_resource)
-    skey = session_key(masqueradable_resource)
+    skey = session_key(masqueradable_resource, masquerading_guid)
 
     Rails.cache.delete(skey)
     session.delete(skey)
     session.delete(session_key_masqueraded_resource_class)
     session.delete(session_key_masquerading_resource_class)
+    session.delete(session_key_masquerading_resource_guid)
   end
 
-  def session_key(masqueradable_resource)
-    "devise_masquerade_#{masqueraded_resource_name}_#{masqueradable_resource.to_param}".to_sym
+  def session_key(masqueradable_resource, guid)
+    "devise_masquerade_#{masqueraded_resource_name}_#{masqueradable_resource.to_param}_#{guid}".to_sym
   end
 
   def session_key_masqueraded_resource_class
@@ -170,6 +176,19 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def session_key_masquerading_resource_class
-      "devise_masquerade_masquerading_resource_class"
+    "devise_masquerade_masquerading_resource_class"
+  end
+
+  def session_key_masquerading_resource_guid
+    "devise_masquerade_masquerading_resource_guid"
+  end
+
+  def masquerading_current_user
+    send("current_#{masquerading_resource_name}")
+  end
+
+  def masquerading_guid
+    session[session_key_masquerading_resource_guid]
   end
 end
+

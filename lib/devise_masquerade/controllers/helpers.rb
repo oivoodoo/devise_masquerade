@@ -39,22 +39,27 @@ module DeviseMasquerade
 
           def #{name}_masquerade?
             return false if current_#{name}.blank?
+            return false if session[#{name}_helper_session_key].blank?
 
-            key = "devise_masquerade_#{name}_" + current_#{name}.to_param
-            return false if session[key].blank?
-
-            ::Rails.cache.exist?(key.to_sym).present?
+            ::Rails.cache.exist?(#{name}_helper_session_key).present?
           end
 
           def #{name}_masquerade_owner
             return unless send(:#{name}_masquerade?)
 
-            key = "devise_masquerade_#{name}_" + current_#{name}.to_param
-            sgid = ::Rails.cache.read(key.to_sym)
+            sgid = ::Rails.cache.read(#{name}_helper_session_key)
             GlobalID::Locator.locate_signed(sgid, for: 'masquerade')
           end
 
           private
+
+          def #{name}_helper_session_key
+            ["devise_masquerade_#{name}", current_#{name}.to_param, #{name}_helper_masquerading_resource_guid].join("_")
+          end
+
+          def #{name}_helper_masquerading_resource_guid
+            session["devise_masquerade_masquerading_resource_guid"].to_s
+          end
 
           def masquerade_sign_in(resource)
             if Devise.masquerade_bypass_warden_callback
