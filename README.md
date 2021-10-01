@@ -8,8 +8,6 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/cf63d775dc014a7ebc03/maintainability)](https://codeclimate.com/github/oivoodoo/devise_masquerade/maintainability)
 
-[![Analytics](https://ga-beacon.appspot.com/UA-46818771-1/devise_masquerade/README.md)](https://github.com/oivoodoo/devise_masquerade)
-
 [Consulting](https://bitscorp.co)
 
 It's a utility library for enabling functionallity like login as button for
