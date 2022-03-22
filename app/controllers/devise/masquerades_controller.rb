@@ -26,7 +26,7 @@ class Devise::MasqueradesController < DeviseController
 
       unless resource
         flash[:error] = "#{masqueraded_resource_class} not found."
-        redirect_to(new_user_session_path) and return
+        redirect_to(send("new_#{masqueraded_resource_name}_session_path")) and return
       end
 
       request.env['devise.skip_trackable'] = '1'
