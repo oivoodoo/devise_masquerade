@@ -24,11 +24,17 @@ module Devise
   # Example: Devise.masqueraded_resource_class = User
   mattr_accessor :masqueraded_resource_class
 
+  # Example: Devise.masqueraded_resource_class_name = 'User'
+  mattr_accessor :masqueraded_resource_class_name
+
   # Example: Devise.masqueraded_resource_name = :user
   mattr_accessor :masqueraded_resource_name
 
   # Example: Devise.masquerading_resource_class = AdminUser
   mattr_accessor :masquerading_resource_class
+
+  # Example: Devise.masquerading_resource_class_name = 'AdminUser'
+  mattr_accessor :masquerading_resource_class_name
 
   # Example: Devise.masquerading_resource_name = :admin_user
   mattr_accessor :masquerading_resource_name

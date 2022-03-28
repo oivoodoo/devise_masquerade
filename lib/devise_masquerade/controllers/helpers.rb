@@ -12,7 +12,9 @@ module DeviseMasquerade
             klass = unless params[:masqueraded_resource_class].blank?
               params[:masqueraded_resource_class].constantize
             else
-              if Devise.masqueraded_resource_class
+              if Devise.masqueraded_resource_class_name.present?
+                Devise.masqueraded_resource_class_name.constantize
+              elsif Devise.masqueraded_resource_class
                 Devise.masqueraded_resource_class
               elsif defined?(User)
                 User
