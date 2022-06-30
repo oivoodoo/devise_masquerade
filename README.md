@@ -167,7 +167,7 @@ in `routes.rb`:
     Devise.masquerade_bypass_warden_callback = false
     Devise.masquerade_routes_back = false # if true, route back to the page the user was on via redirect_back
     Devise.masquerading_resource_class = AdminUser
-    # optional: Devise.masquerading_resource_class = 'AdminUser'
+    # optional: Devise.masquerading_resource_class_name = 'AdminUser'
 
     # optional, default: masquerading_resource_class.model_name.param_key
     Devise.masquerading_resource_name = :admin_user
