@@ -39,6 +39,20 @@ module Devise
   # Example: Devise.masquerading_resource_name = :admin_user
   mattr_accessor :masquerading_resource_name
 
+  # Example: Devise.masquerade_storage_method = :session
+  # - session
+  # - cache
+  mattr_accessor :masquerade_storage_method
+  @@masquerade_storage_method = :session
+
+  def self.masquerade_storage_method_session?
+    Devise.masquerade_storage_method == :session
+  end
+
+  def self.masquerade_storage_method_cache?
+    Devise.masquerade_storage_method == :session
+  end
+
   @@helpers << DeviseMasquerade::Controllers::Helpers
 end
 
