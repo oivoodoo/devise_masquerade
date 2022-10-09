@@ -50,7 +50,7 @@ module Devise
   end
 
   def self.masquerade_storage_method_cache?
-    Devise.masquerade_storage_method == :session
+    Devise.masquerade_storage_method == :cache
   end
 
   @@helpers << DeviseMasquerade::Controllers::Helpers
