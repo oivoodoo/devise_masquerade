@@ -177,6 +177,10 @@ in `routes.rb`:
 
     # optional, default: masqueraded_resource_class.model_name.param_key
     Devise.masqueraded_resource_name = :user
+
+    # optional, default: masquerade_storage_method = :session
+    # values: :session, :cache
+    Devise.masquerade_storage_method = :session
 ```
 
 ## Demo project

@@ -9,3 +9,10 @@ Given /^I logged in$/ do
   click_on 'Log in'
 end
 
+Given("devise masquerade configured to use cache") do
+  Devise.masquerade_storage_method = :cache
+end
+
+Given("devise masquerade configured to use session") do
+  Devise.masquerade_storage_method = :session
+end

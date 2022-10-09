@@ -77,7 +77,13 @@ class Devise::MasqueradesController < DeviseController
   def find_owner_resource(masqueradable_resource)
     skey = session_key(masqueradable_resource, masquerading_guid)
 
-    GlobalID::Locator.locate_signed(Rails.cache.read(skey), for: 'masquerade')
+    data = if Devise.masquerade_storage_method_session?
+      session[skey]
+    else
+      Rails.cache.read(skey)
+    end
+
+    GlobalID::Locator.locate_signed(data, for: 'masquerade')
   end
 
   def go_back(user, path:)
@@ -157,9 +163,15 @@ class Devise::MasqueradesController < DeviseController
 
     resource_gid = send("current_#{masquerading_resource_name}").to_sgid(for: 'masquerade')
 
-    # skip sharing owner id via session
-    Rails.cache.write(skey, resource_gid)
-    session[skey] = true
+    if Devise.masquerade_storage_method_session?
+      session[skey] = resource_gid
+    else
+      # skip sharing owner id via session
+      Rails.cache.write(skey, resource_gid)
+
+      session[skey] = true
+    end
+
     session[session_key_masquerading_resource_class] = masquerading_resource_class.name
     session[session_key_masqueraded_resource_class] = masqueraded_resource_class.name
     session[session_key_masquerading_resource_guid] = guid
@@ -168,8 +180,8 @@ class Devise::MasqueradesController < DeviseController
   def cleanup_masquerade_owner_session(masqueradable_resource)
     skey = session_key(masqueradable_resource, masquerading_guid)
 
-    Rails.cache.delete(skey)
-    session.delete(skey)
+    Rails.cache.delete(skey) if Devise.masquerade_storage_method_cache?
+
     session.delete(session_key_masqueraded_resource_class)
     session.delete(session_key_masquerading_resource_class)
     session.delete(session_key_masquerading_resource_guid)

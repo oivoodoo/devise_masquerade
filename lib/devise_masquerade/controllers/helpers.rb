@@ -43,13 +43,22 @@ module DeviseMasquerade
             return false if current_#{name}.blank?
             return false if session[#{name}_helper_session_key].blank?
 
-            ::Rails.cache.exist?(#{name}_helper_session_key).present?
+            if Devise.masquerade_storage_method_session?
+              session[#{name}_helper_session_key].present?
+            else
+              ::Rails.cache.exist?(#{name}_helper_session_key).present?
+            end
           end
 
           def #{name}_masquerade_owner
             return unless send(:#{name}_masquerade?)
 
-            sgid = ::Rails.cache.read(#{name}_helper_session_key)
+            sgid = if Devise.masquerade_storage_method_session?
+              session[#{name}_helper_session_key]
+            else
+              ::Rails.cache.read(#{name}_helper_session_key)
+            end
+
             GlobalID::Locator.locate_signed(sgid, for: 'masquerade')
           end
 

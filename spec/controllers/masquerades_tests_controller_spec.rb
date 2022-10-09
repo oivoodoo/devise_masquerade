@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe MasqueradesTestsController, type: :controller do
+  before { Devise.masquerade_storage_method = :cache }
+  after { Devise.masquerade_storage_method = :session }
+
   before { @request.env['devise.mapping'] = Devise.mappings[:user] }
 
   context 'no access for masquerade' do
