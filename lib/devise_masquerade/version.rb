@@ -1,3 +1,3 @@
 module DeviseMasquerade
-  VERSION = '1.3.11'.freeze
+  VERSION = '2.0.0'.freeze
 end
