@@ -112,12 +112,21 @@ module DeviseMasquerade
             "devise_masquerade_masquerading_resource_class"
           end
 
+          def session_key_masquerading_resource_guid
+            "devise_masquerade_masquerading_resource_guid"
+          end
+
         METHODS
 
         ActiveSupport.on_load(:action_controller) do
           if respond_to?(:helper_method)
             helper_method "#{name}_masquerade?"
             helper_method "#{name}_masquerade_owner"
+
+            helper_method :masqueraded_resource_class
+            helper_method :session_key_masqueraded_resource_class
+            helper_method :session_key_masquerading_resource_class
+            helper_method :session_key_masquerading_resource_guid
           end
         end
       end

@@ -98,24 +98,6 @@ class Devise::MasqueradesController < DeviseController
 
   private
 
-  def masqueraded_resource_class
-    @masqueraded_resource_class ||= begin
-      unless params[:masqueraded_resource_class].blank?
-        params[:masqueraded_resource_class].constantize
-      else
-        unless session[session_key_masqueraded_resource_class].blank?
-          session[session_key_masquerading_resource_class].constantize
-        else
-          if Devise.masqueraded_resource_class_name.present?
-            Devise.masqueraded_resource_class_name.constantize
-          else
-            Devise.masqueraded_resource_class || resource_class
-          end
-        end
-      end
-    end
-  end
-
   def masqueraded_resource_name
     Devise.masqueraded_resource_name || masqueraded_resource_class.model_name.param_key
   end
@@ -191,18 +173,6 @@ class Devise::MasqueradesController < DeviseController
 
   def session_key(masqueradable_resource, guid)
     "devise_masquerade_#{masqueraded_resource_name}_#{masqueradable_resource.to_param}_#{guid}".to_sym
-  end
-
-  def session_key_masqueraded_resource_class
-    "devise_masquerade_masqueraded_resource_class"
-  end
-
-  def session_key_masquerading_resource_class
-    "devise_masquerade_masquerading_resource_class"
-  end
-
-  def session_key_masquerading_resource_guid
-    "devise_masquerade_masquerading_resource_guid"
   end
 
   def masquerading_current_user
