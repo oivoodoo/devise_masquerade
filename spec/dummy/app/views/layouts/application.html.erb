@@ -17,6 +17,8 @@
       <% end %>
 
       <% if user_masquerade? %>
+        <h1 class='owner_user'><%= user_masquerade_owner.email %></h1>
+
         <%= link_to "Back masquerade", back_masquerade_path(User.new) %>
       <% end %>
     <% end %>

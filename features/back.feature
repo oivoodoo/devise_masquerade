@@ -11,6 +11,7 @@ Feature: Use back button for returning to the owner of the masquerade action.
     When I am on the users page
     And I login as one user
       Then I should be login as this user
+      And I should be masqueraded by owner user
 
     When I press back masquerade button
       Then I should be login as owner user
@@ -23,6 +24,7 @@ Feature: Use back button for returning to the owner of the masquerade action.
     When I am on the users page
     And I login as one user
       Then I should be login as this user
+      And I should be masqueraded by owner user
 
     When I press back masquerade button
       Then I should be login as owner user

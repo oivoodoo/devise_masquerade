@@ -13,6 +13,7 @@ Feature: Use back button for returning to the owner despite on expiration time.
     When I am on the users page
     And I login as one user
       Then I should be login as this user
+      And I should be masqueraded by owner user
       And I waited for 2 seconds
 
     When I press back masquerade button
@@ -28,6 +29,7 @@ Feature: Use back button for returning to the owner despite on expiration time.
     When I am on the users page
     And I login as one user
       Then I should be login as this user
+      And I should be masqueraded by owner user
       And I waited for 2 seconds
 
     When I press back masquerade button

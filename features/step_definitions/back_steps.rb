@@ -14,6 +14,10 @@ Then /^I should be login as this user$/ do
   find('.current_user').should have_content(@user_mask.email)
 end
 
+Then /^I should be masqueraded by owner user$/ do
+  find('.owner_user').should have_content(@user.email)
+end
+
 When /^I press back masquerade button$/ do
   click_on "Back masquerade"
 end

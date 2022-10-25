@@ -53,13 +53,15 @@ module DeviseMasquerade
           def #{name}_masquerade_owner
             return unless send(:#{name}_masquerade?)
 
-            sgid = if Devise.masquerade_storage_method_session?
-              session[#{name}_helper_session_key]
-            else
-              ::Rails.cache.read(#{name}_helper_session_key)
-            end
+            if Devise.masquerade_storage_method_session?
+              resource_id = session[#{name}_helper_session_key]
 
-            GlobalID::Locator.locate_signed(sgid, for: 'masquerade')
+              masqueraded_resource_class.find(resource_id)
+            else
+              sgid = ::Rails.cache.read(#{name}_helper_session_key)
+
+              GlobalID::Locator.locate_signed(sgid, for: 'masquerade')
+            end
           end
 
           private
@@ -83,6 +85,33 @@ module DeviseMasquerade
               sign_in(resource)
             end
           end
+
+          def masqueraded_resource_class
+            @masqueraded_resource_class ||= begin
+              unless params[:masqueraded_resource_class].blank?
+                params[:masqueraded_resource_class].constantize
+              else
+                unless session[session_key_masqueraded_resource_class].blank?
+                  session[session_key_masquerading_resource_class].constantize
+                else
+                  if Devise.masqueraded_resource_class_name.present?
+                    Devise.masqueraded_resource_class_name.constantize
+                  else
+                    Devise.masqueraded_resource_class || resource_class
+                  end
+                end
+              end
+            end
+          end
+
+          def session_key_masqueraded_resource_class
+            "devise_masquerade_masqueraded_resource_class"
+          end
+
+          def session_key_masquerading_resource_class
+            "devise_masquerade_masquerading_resource_class"
+          end
+
         METHODS
 
         ActiveSupport.on_load(:action_controller) do
