@@ -80,7 +80,7 @@ class Devise::MasqueradesController < DeviseController
     if Devise.masquerade_storage_method_session?
       resource_id = session[skey]
 
-      masqueraded_resource_class.find(resource_id)
+      masquerading_resource_class.find(resource_id)
     else
       data = Rails.cache.read(skey)
 
