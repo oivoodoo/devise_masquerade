@@ -145,7 +145,7 @@ For example, if you use FriendlyId:
     class Admin::MasqueradesController < Devise::MasqueradesController
       protected
 
-      def find_resource
+      def find_masqueradable_resource
         masqueraded_resource_class.friendly.find(params[:id])
       end
     end
