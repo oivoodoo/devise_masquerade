@@ -14,7 +14,7 @@ describe Devise::MasqueradesController, type: :controller do
         let(:mask) { create(:student) }
 
         before do
-          get :show, params: { id: mask.to_param, masqueraded_resource_class: mask.class.name, masquerade: mask.masquerade_key }
+          get :show, params: { id: mask.id, masqueraded_resource_class: mask.class.name, masquerade: mask.masquerade_key }
         end
 
         it { expect(cache_read(mask)).to be }
@@ -33,7 +33,7 @@ describe Devise::MasqueradesController, type: :controller do
         let(:mask) { create(:user) }
 
         before do
-          get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
+          get :show, params: { id: mask.id, masquerade: mask.masquerade_key }
         end
 
         it { expect(cache_read(mask)).to be }
@@ -61,7 +61,7 @@ describe Devise::MasqueradesController, type: :controller do
           context 'with http referrer' do
             before do
               @request.env['HTTP_REFERER'] = 'previous_location'
-              get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
+              get :show, params: { id: mask.id, masquerade: mask.masquerade_key }
             end # before
 
             it { should redirect_to('previous_location') }
@@ -73,7 +73,7 @@ describe Devise::MasqueradesController, type: :controller do
                 receive(:after_masquerade_path_for).and_return("/dashboard?color=red"))
             end
 
-            before { get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key } }
+            before { get :show, params: { id: mask.id, masquerade: mask.masquerade_key } }
 
             it { should redirect_to("/dashboard?color=red") }
           end # context
@@ -81,7 +81,7 @@ describe Devise::MasqueradesController, type: :controller do
 
         context 'and back' do
           before do
-            get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
+            get :show, params: { id: mask.id, masquerade: mask.masquerade_key }
 
             get :back
           end
@@ -91,7 +91,7 @@ describe Devise::MasqueradesController, type: :controller do
 
         context 'and back fallback if http_referer not present' do
           before do
-            get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
+            get :show, params: { id: mask.id, masquerade: mask.masquerade_key }
 
             @request.env['HTTP_REFERER'] = 'previous_location'
             get :back
@@ -123,6 +123,6 @@ describe Devise::MasqueradesController, type: :controller do
   end
 
   def cache_key(user)
-    "devise_masquerade_#{mask.class.name.downcase}_#{mask.to_param}_#{guid}"
+    "devise_masquerade_#{mask.class.name.downcase}_#{mask.id}_#{guid}"
   end
 end

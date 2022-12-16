@@ -148,7 +148,7 @@ class Devise::MasqueradesController < DeviseController
     resource_obj = send("current_#{masquerading_resource_name}")
 
     if Devise.masquerade_storage_method_session?
-      session[skey] = resource_obj.to_param
+      session[skey] = resource_obj.id
     else
       # skip sharing owner id via session
       Rails.cache.write(skey, resource_obj.to_sgid(for: 'masquerade'))
@@ -172,7 +172,7 @@ class Devise::MasqueradesController < DeviseController
   end
 
   def session_key(masqueradable_resource, guid)
-    "devise_masquerade_#{masqueraded_resource_name}_#{masqueradable_resource.to_param}_#{guid}".to_sym
+    "devise_masquerade_#{masqueraded_resource_name}_#{masqueradable_resource.id}_#{guid}".to_sym
   end
 
   def masquerading_current_user

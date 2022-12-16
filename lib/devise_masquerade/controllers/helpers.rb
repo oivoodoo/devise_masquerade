@@ -67,7 +67,7 @@ module DeviseMasquerade
           private
 
           def #{name}_helper_session_key
-            ["devise_masquerade_#{name}", current_#{name}.to_param, #{name}_helper_masquerading_resource_guid].join("_")
+            ["devise_masquerade_#{name}", current_#{name}.id, #{name}_helper_masquerading_resource_guid].join("_")
           end
 
           def #{name}_helper_masquerading_resource_guid

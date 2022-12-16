@@ -16,7 +16,7 @@ describe MasqueradesTestsController, type: :controller do
 
     let(:mask) { create(:user) }
 
-    before { get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key } }
+    before { get :show, params: { id: mask.id, masquerade: mask.masquerade_key } }
 
     it { expect(response.status).to eq(403) }
     it { expect(cache_read(mask)).not_to be }
@@ -34,7 +34,7 @@ describe MasqueradesTestsController, type: :controller do
     let(:mask) { create(:user) }
 
     before do
-      get :show, params: { id: mask.to_param, masquerade: mask.masquerade_key }
+      get :show, params: { id: mask.id, masquerade: mask.masquerade_key }
     end
 
     it { expect(response.status).to eq(302) }
@@ -52,6 +52,6 @@ describe MasqueradesTestsController, type: :controller do
   end
 
   def cache_key(user)
-    "devise_masquerade_#{mask.class.name.downcase}_#{mask.to_param}_#{guid}"
+    "devise_masquerade_#{mask.class.name.downcase}_#{mask.id}_#{guid}"
   end
 end
