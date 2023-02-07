@@ -92,7 +92,7 @@ module DeviseMasquerade
                 params[:masqueraded_resource_class].constantize
               else
                 unless session[session_key_masqueraded_resource_class].blank?
-                  session[session_key_masquerading_resource_class].constantize
+                  session[session_key_masqueraded_resource_class].constantize
                 else
                   if Devise.masqueraded_resource_class_name.present?
                     Devise.masqueraded_resource_class_name.constantize

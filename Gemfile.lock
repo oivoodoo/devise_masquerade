@@ -156,7 +156,7 @@ GEM
     factory_bot_rails (5.1.1)
       factory_bot (~> 5.1.0)
       railties (>= 4.2.0)
-    ffi (1.11.1)
+    ffi (1.15.5)
     formatador (0.2.5)
     gherkin (5.1.0)
     globalid (1.0.1)
