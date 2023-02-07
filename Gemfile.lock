@@ -52,7 +52,7 @@ GIT
 PATH
   remote: .
   specs:
-    devise_masquerade (2.1.0)
+    devise_masquerade (2.1.1)
       devise (>= 4.7.0)
       globalid (>= 0.3.6)
       railties (>= 5.2.0)
@@ -243,9 +243,9 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     regexp_parser (2.6.0)
-    responders (3.0.1)
-      actionpack (>= 5.0)
-      railties (>= 5.0)
+    responders (3.1.0)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
     rubyzip (2.0.0)
     selenium-webdriver (3.142.6)
       childprocess (>= 0.5, < 4.0)
