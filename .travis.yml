@@ -1,7 +1,7 @@
 language: ruby
 rvm:
-  - 2.6.0
-  - 2.7.3
+  - 2.7.7
+  - 3.0.4
 script: time ./script/travis.sh
 addons:
   apt:
