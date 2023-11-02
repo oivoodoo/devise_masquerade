@@ -166,6 +166,7 @@ class Devise::MasqueradesController < DeviseController
 
     Rails.cache.delete(skey) if Devise.masquerade_storage_method_cache?
 
+    session.delete(skey)
     session.delete(session_key_masqueraded_resource_class)
     session.delete(session_key_masquerading_resource_class)
     session.delete(session_key_masquerading_resource_guid)
