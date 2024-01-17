@@ -33,12 +33,16 @@ describe Devise::MasqueradesController, type: :controller do
         let(:mask) { create(:user) }
 
         before do
+          allow_any_instance_of(described_class).to(
+            receive(:after_masquerade_flash_message).with(mask).and_return("You are logged as an user"))
+
           get :show, params: { id: mask.id, masquerade: mask.masquerade_key }
         end
 
         it { expect(cache_read(mask)).to be }
         it { expect(session["warden.user.user.key"].first.first).to eq(mask.id) }
         it { should redirect_to('/') }
+        it { expect(flash[:notice]).to match("You are logged as an user") }
 
         context 'and back' do
           before { get :back }
@@ -81,12 +85,17 @@ describe Devise::MasqueradesController, type: :controller do
 
         context 'and back' do
           before do
+            allow_any_instance_of(described_class).to(
+              receive(:after_back_masquerade_flash_message).with(mask).and_return("You logged out from user's session")
+            )
+
             get :show, params: { id: mask.id, masquerade: mask.masquerade_key }
 
             get :back
           end
 
           it { should redirect_to(masquerade_page) }
+          it { expect(flash[:notice]).to match("You logged out from user's session") }
         end # context
 
         context 'and back fallback if http_referer not present' do
