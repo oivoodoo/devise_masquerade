@@ -5,7 +5,7 @@ gemspec
 
 group :test do
   gem 'activerecord', '>= 5.2'
-  gem 'actionmailer', '>= 7.0.8.1'
+  gem 'actionmailer', '>= 7.0.8.7'
   gem 'bson_ext', '~> 1.3'
   gem 'sqlite3', '~> 1.4'
 
@@ -31,11 +31,10 @@ group :test do
   gem 'factory_bot_rails', '>= 5.2.0'
   gem 'database_cleaner', '< 1.1.0'
   gem 'cucumber'
-  gem 'cucumber-rails', '>= 2.1.0'
   gem 'capybara', '>= 3.38.0'
+  gem 'cucumber-rails', '>= 3.0.0'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
   gem 'launchy'
-
-  gem "nokogiri", ">= 1.15.6"
+  gem "nokogiri", ">= 1.16.5"
 end
