@@ -28,14 +28,14 @@ group :test do
 
   gem 'shoulda'
   gem 'rb-fsevent'
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '>= 5.2.0'
   gem 'database_cleaner', '< 1.1.0'
   gem 'cucumber'
+  gem 'capybara', '>= 3.38.0'
   gem 'cucumber-rails', '>= 3.0.0'
-  gem 'capybara'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
   gem 'launchy'
 
-  gem "nokogiri", ">= 1.15.7"
+  gem "nokogiri", ">= 1.16.5"
 end
