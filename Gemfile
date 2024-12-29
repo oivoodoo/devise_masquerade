@@ -36,6 +36,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
   gem 'launchy'
-
   gem "nokogiri", ">= 1.16.5"
 end
