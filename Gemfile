@@ -32,7 +32,7 @@ group :test do
   gem 'database_cleaner', '< 1.1.0'
   gem 'cucumber'
   gem 'capybara', '>= 3.38.0'
-  gem 'cucumber-rails', '>= 3.0.0'
+  gem 'cucumber-rails', '>= 2.1.0'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
   gem 'launchy'
