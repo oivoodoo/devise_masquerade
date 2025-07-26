@@ -28,7 +28,7 @@ group :test do
 
   gem 'shoulda'
   gem 'rb-fsevent'
-  gem 'factory_bot_rails', '>= 5.2.0'
+  gem 'factory_bot_rails', '>= 6.5.0'
   gem 'database_cleaner', '< 1.1.0'
   gem 'cucumber'
   gem 'capybara', '>= 3.38.0'
@@ -36,5 +36,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
   gem 'launchy'
-  gem 'nokogiri', '>= 1.18.8'
+  gem 'nokogiri', '>= 1.18.9'
 end
