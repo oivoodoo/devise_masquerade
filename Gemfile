@@ -4,8 +4,8 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'activerecord', '>= 5.2'
-  gem 'actionmailer', '>= 7.0.8.7'
+  gem 'activerecord', '>= 8.0.2.1'
+  gem 'actionmailer', '>= 8.0.2.1'
   gem 'bson_ext', '~> 1.3'
   gem 'sqlite3'
 
