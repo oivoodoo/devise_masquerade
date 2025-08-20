@@ -4,9 +4,8 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'activerecord', '>= 5.2'
+  gem 'activerecord', '>= 8.0.2.1'
   gem 'actionmailer', '>= 7.0.8.7'
-  gem 'bson_ext', '~> 1.3'
   gem 'sqlite3'
 
   gem 'test-unit'
@@ -29,12 +28,18 @@ group :test do
   gem 'shoulda'
   gem 'rb-fsevent'
   gem 'factory_bot_rails', '>= 5.2.0'
-  gem 'database_cleaner', '< 1.1.0'
+  gem 'database_cleaner', '>= 2.0.0'
   gem 'cucumber'
   gem 'capybara', '>= 3.38.0'
   gem 'cucumber-rails', '>= 2.1.0'
   gem 'selenium-webdriver'
-  gem 'chromedriver-helper'
+  gem 'webdrivers'
   gem 'launchy'
   gem 'nokogiri', '>= 1.18.8'
+  
+  # Security updates
+  gem 'rack', '>= 3.1.16'
+  gem 'rack-session', '>= 2.1.1'
+  gem 'thor', '>= 1.4.0'
+  gem 'net-imap', '>= 0.5.7'
 end
