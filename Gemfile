@@ -33,7 +33,7 @@ group :test do
   gem 'cucumber'
   gem 'capybara', '>= 3.38.0'
   gem 'cucumber-rails', '>= 2.1.0'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '>= 4.30.0'
   gem 'chromedriver-helper'
   gem 'launchy'
   gem 'nokogiri', '>= 1.18.8'
