@@ -1,6 +1,6 @@
 require 'cucumber/rails'
 require 'factory_bot'
-require 'database_cleaner'
+require 'database_cleaner/active_record'
 require 'cucumber/rspec/doubles'
 
 Dir[File.join(File.dirname(__FILE__), '..', '..', "spec/support/*.rb")].each {|f| require f}
@@ -16,7 +16,7 @@ end
 World(FactoryBot::Syntax::Methods)
 
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner[:active_record].strategy = :transaction
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end

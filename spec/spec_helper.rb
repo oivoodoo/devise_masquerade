@@ -7,7 +7,7 @@ require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require 'rails/test_help'
 require 'rspec/rails'
 require 'factory_bot'
-require 'database_cleaner'
+require 'database_cleaner/active_record'
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -28,15 +28,15 @@ RSpec.configure do |config|
   config.mock_with :rspec
 
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner[:active_record].strategy = :transaction
+    DatabaseCleaner[:active_record].clean_with(:truncation)
   end
 
   config.before(:each) do
-    DatabaseCleaner.start
+    DatabaseCleaner[:active_record].start
   end
 
   config.after(:each) do
-    DatabaseCleaner.clean
+    DatabaseCleaner[:active_record].clean
   end
 end
