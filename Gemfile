@@ -40,11 +40,5 @@ group :test do
   gem 'webdrivers'
 
   gem 'launchy'
-  gem 'nokogiri', '>= 1.18.8'
-  
-  # Security updates
-  gem 'rack', '>= 3.2.3'
-  gem 'rack-session', '>= 2.1.1'
-  gem 'thor', '>= 1.4.0'
-  gem 'net-imap', '>= 0.5.7'
+  gem 'nokogiri', '>= 1.18.9'
 end
