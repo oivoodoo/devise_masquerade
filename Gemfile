@@ -33,9 +33,12 @@ group :test do
   gem 'database_cleaner', '>= 2.0.0'
   gem 'cucumber'
   gem 'capybara', '>= 3.38.0'
+  gem 'chromedriver-helper'
+
   gem 'cucumber-rails', '>= 4.0.0'
   gem 'selenium-webdriver'
   gem 'webdrivers'
+
   gem 'launchy'
   gem 'nokogiri', '>= 1.18.8'
   
