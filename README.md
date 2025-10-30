@@ -81,7 +81,7 @@ helpers:
       protected
 
       def masquerade_authorize!
-        authorize!(:masquerade, User)
+        authorize(User, :masquerade?) unless params[:action] == 'back'
       end
 
       # or you can define:
