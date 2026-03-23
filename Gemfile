@@ -3,6 +3,12 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in devise_masquerade.gemspec
 gemspec
 
+if ENV["DEVISE_VERSION"] == "5"
+  gem "devise", "~> 5.0"
+elsif ENV["DEVISE_VERSION"] == "4"
+  gem "devise", "~> 4.9"
+end
+
 group :test do
   gem 'activerecord', '>= 8.0.3'
 

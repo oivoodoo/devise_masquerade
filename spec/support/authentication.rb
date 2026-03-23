@@ -10,7 +10,7 @@ module Authentication
 
   def admin_logged_in
     @admin_user ||= create(:admin_user)
-    sign_in(:admin, @admin_user)
+    sign_in(@admin_user, scope: :admin)
   end
 
   def current_admin_user
