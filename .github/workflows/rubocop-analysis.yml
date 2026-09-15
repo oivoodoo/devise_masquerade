@@ -2,9 +2,16 @@ name: "Rubocop"
 
 on: push
 
+permissions:
+  contents: read
+
 jobs:
   rubocop:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
     strategy:
       fail-fast: false
 
@@ -12,16 +19,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # If running on a self-hosted runner, check it meets the requirements
-    # listed at https://github.com/ruby/setup-ruby#using-self-hosted-runners
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 3.2
 
-    # This step is not necessary if you add the gem to your Gemfile
+    # 0.6.1 maps last_column 0 to real_column; 0.3.0 emitted endColumn 0
+    # which github/codeql-action/upload-sarif@v4 rejects (must be >= 1).
     - name: Install Code Scanning integration
-      run: bundle add code-scanning-rubocop --version 0.3.0 --skip-install
+      run: bundle add code-scanning-rubocop --version 0.6.1 --skip-install
 
     - name: Install dependencies
       run: bundle install
@@ -33,7 +39,32 @@ jobs:
           [[ $? -ne 2 ]]
         "
 
+    - name: Normalize SARIF columns
+      run: |
+        python3 - <<'PY'
+        import json
+        from pathlib import Path
+        path = Path("rubocop.sarif")
+        data = json.loads(path.read_text())
+
+        def fix(node):
+            if isinstance(node, dict):
+                for key in ("startColumn", "endColumn"):
+                    value = node.get(key)
+                    if isinstance(value, int) and value < 1:
+                        node[key] = 1
+                for value in node.values():
+                    fix(value)
+            elif isinstance(node, list):
+                for item in node:
+                    fix(item)
+
+        fix(data)
+        path.write_text(json.dumps(data))
+        PY
+
     - name: Upload Sarif output
       uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: rubocop.sarif
+        category: rubocop
