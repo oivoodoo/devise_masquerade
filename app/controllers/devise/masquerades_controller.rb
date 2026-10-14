@@ -15,7 +15,7 @@ class Devise::MasqueradesController < DeviseController
     if send("#{masqueraded_resource_name}_masquerade?")
       resource = masquerading_current_user
 
-      go_back(resource, path: after_masquerade_full_path_for(resource))
+      go_back(resource, path: after_masquerade_full_path_for(resource), message: "")
     else
       masqueradable_resource = find_masqueradable_resource
 
@@ -33,14 +33,14 @@ class Devise::MasqueradesController < DeviseController
 
       masquerade_sign_in(resource)
 
-      go_back(resource, path: after_masquerade_full_path_for(resource))
+      go_back(resource, path: after_masquerade_full_path_for(resource), message: after_masquerade_flash_message(resource))
     end
   end
 
   def back
     unless send("#{masqueraded_resource_name}_masquerade?")
       resource = send("current_#{masqueraded_resource_name}")
-      go_back(resource, path: after_back_masquerade_path_for(resource))
+      go_back(resource, path: after_back_masquerade_path_for(resource), message: "")
     else
       masqueradable_resource = send("current_#{masqueraded_resource_name}")
 
@@ -54,7 +54,7 @@ class Devise::MasqueradesController < DeviseController
       sign_in(resource)
       request.env['devise.skip_trackable'] = nil
 
-      go_back(resource, path: after_back_masquerade_path_for(resource))
+      go_back(resource, path: after_back_masquerade_path_for(resource), message: after_back_masquerade_flash_message(masqueradable_resource))
 
       cleanup_masquerade_owner_session(masqueradable_resource)
     end
@@ -88,10 +88,12 @@ class Devise::MasqueradesController < DeviseController
     end
   end
 
-  def go_back(user, path:)
+  def go_back(user, path:, message:)
     if Devise.masquerade_routes_back
+      flash[:notice] = message
       redirect_back(fallback_location: path)
     else
+      flash[:notice] = message
       redirect_to path
     end
   end
@@ -132,12 +134,20 @@ class Devise::MasqueradesController < DeviseController
     '/'
   end
 
+  def after_masquerade_flash_message(resource)
+    ""
+  end
+
   def after_masquerade_full_path_for(resource)
     after_masquerade_path_for(resource)
   end
 
   def after_back_masquerade_path_for(resource)
     '/'
+  end
+
+  def after_back_masquerade_flash_message(resource)
+    ""
   end
 
   def save_masquerade_owner_session(masqueradable_resource)
