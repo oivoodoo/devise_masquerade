@@ -109,6 +109,48 @@ describe Devise::MasqueradesController, type: :controller do
     end
   end
 
+  describe 'masquerade owner across different models' do
+    let(:owner) { create(:user) }
+    let(:mask) do
+      student = create(:student)
+      student.update_column(:id, owner.id)
+      Student.find(owner.id)
+    end
+
+    before do
+      @request.env['devise.mapping'] = Devise.mappings[:user]
+      sign_in(owner)
+    end
+
+    def masquerade_as_student
+      get :show, params: {
+        id: mask.id,
+        masqueraded_resource_class: 'Student',
+        masquerade: mask.masquerade_key
+      }
+    end
+
+    context 'with session storage' do
+      before { Devise.masquerade_storage_method = :session }
+
+      it 'returns the masquerading user instead of the masqueraded record that shares the id' do
+        masquerade_as_student
+
+        expect(controller.send(:student_masquerade_owner)).to eq(owner)
+      end
+    end
+
+    context 'with cache storage' do
+      before { Devise.masquerade_storage_method = :cache }
+
+      it 'returns the masquerading user from the signed global id' do
+        masquerade_as_student
+
+        expect(controller.send(:student_masquerade_owner)).to eq(owner)
+      end
+    end
+  end
+
   # it's a page with masquerade button ("Login As")
   def masquerade_page
     "/"
