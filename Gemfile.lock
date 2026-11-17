@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    devise_masquerade (2.1.6)
+    devise_masquerade (2.1.7)
       devise (>= 4.7.0)
       globalid (>= 0.3.6)
       railties (>= 5.2.0)
