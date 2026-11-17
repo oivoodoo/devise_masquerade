@@ -56,7 +56,7 @@ module DeviseMasquerade
             if Devise.masquerade_storage_method_session?
               resource_id = session[#{name}_helper_session_key]
 
-              masqueraded_resource_class.find(resource_id)
+              masquerade_owner_class.find(resource_id)
             else
               sgid = ::Rails.cache.read(#{name}_helper_session_key)
 
@@ -130,6 +130,34 @@ module DeviseMasquerade
           end
         end
       end
+
+      # The session stores the owner's id. Resolve that id against the owner
+      # model saved at masquerade time, not the model currently signed in.
+      # Only classes registered with Devise are accepted from the session.
+      def masquerade_owner_class
+        from_session = devise_class_for(session[session_key_masquerading_resource_class])
+        return from_session if from_session
+
+        if Devise.masquerading_resource_class_name.present?
+          devise_class_for(Devise.masquerading_resource_class_name) ||
+            Devise.masquerading_resource_class_name.constantize
+        elsif Devise.masquerading_resource_class
+          Devise.masquerading_resource_class
+        else
+          resource_class
+        end
+      end
+
+      def devise_class_for(class_name)
+        return if class_name.blank?
+
+        Devise.mappings.each_value do |mapping|
+          return mapping.to if mapping.class_name == class_name.to_s
+        end
+
+        nil
+      end
+      private :masquerade_owner_class, :devise_class_for
     end
   end
 end
